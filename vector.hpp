@@ -445,17 +445,13 @@ class vector : public CONTAINER {
 	};
 
 	void swap(vector& x) {
-		pointer tmp_data = x._data;
-		size_type tmp_capacity = x._capacity;
-		size_type tmp_size = x._size;
-
-		x._data = _data;
-		x._capacity = _capacity;
-		x._size = _size;
-
-		_data = tmp_data;
-		_capacity = tmp_capacity;
-		_size = tmp_size;
+		if (this == &x) { return ;}
+		if (_alloc == x._alloc) {
+			std::swap(_size, x._size);
+			std::swap(_capacity, x._capacity);
+			std::swap(_data, x._data);
+		}
+		else { std::swap(*this, x); }
 	};
 
 	void clear(void) {
