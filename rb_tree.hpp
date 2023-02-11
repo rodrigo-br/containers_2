@@ -16,9 +16,9 @@ class Rb_tree : public CONTAINER {
 	typedef typename Alloc::template rebind<RBT_Node<Val> >::other Node_allocator;
 
  public:
-	typedef RBT_Node<Val>								Rb_tree_node;
-	typedef Rb_tree_node*									Node_ptr;
-	typedef const Rb_tree_node*								Const_node_ptr;
+	typedef RBT_Node<Val>								Tree_Node;
+	typedef Tree_Node*									Node_ptr;
+	typedef const Tree_Node*								Const_node_ptr;
 
  public:
 	typedef Key 											key_type;
@@ -214,19 +214,19 @@ class Rb_tree : public CONTAINER {
 	};
 
 	Node_ptr minimum(Node_ptr node) const {
-		return (Rb_tree_node::minimum(node));
+		return (Tree_Node::minimum(node));
 	};
 
 	Node_ptr maximum(Node_ptr node) const {
-		return (Rb_tree_node::maximum(node));
+		return (Tree_Node::maximum(node));
 	};
 
 	Node_ptr successor(Node_ptr x) const {
-		return (Rb_tree_node::successor(x));
+		return (Tree_Node::successor(x));
 	};
 
 	Node_ptr predecessor(Node_ptr x) const {
-		return (Rb_tree_node::predecessor(x));
+		return (Tree_Node::predecessor(x));
 	};
 
 	void insert(value_type data) {
@@ -529,8 +529,8 @@ class Rb_tree : public CONTAINER {
 		}
 	};
 
-	Rb_tree_node create_node(value_type data, Rb_tree_color color) {
-		return (Rb_tree_node(data, root, TNULL, TNULL, TNULL, TNULL, color));
+	Tree_Node create_node(value_type data, Rb_tree_color color) {
+		return (Tree_Node(data, root, TNULL, TNULL, TNULL, TNULL, color));
 	};
 };
 #undef CONTAINER

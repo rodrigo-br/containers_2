@@ -10,9 +10,9 @@ enum Rb_tree_color {
 
 template <typename T>
 struct RBT_Node {
-	typedef RBT_Node<T>	Rb_tree_node;
-	typedef Rb_tree_node*		Node_ptr;
-	typedef const Rb_tree_node*	Const_node_ptr;
+	typedef RBT_Node<T>			Tree_Node;
+	typedef Tree_Node*		Node_ptr;
+	typedef const Tree_Node*	Const_node_ptr;
 
 	explicit RBT_Node(const T& _data, Node_ptr _root, Node_ptr _leaf,
 							Node_ptr _parent = NULL,

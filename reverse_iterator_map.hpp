@@ -20,9 +20,9 @@ class rb_tree_reverse_iterator
 	typedef typename iterator_traits<Iterator>::difference_type		difference_type;
 	typedef typename iterator_traits<Iterator>::pointer				pointer;
 	typedef typename iterator_traits<Iterator>::reference			reference;
-	typedef RBT_Node<value_type>								Rb_tree_node;
-	typedef Rb_tree_node*											Node_ptr;
-	typedef const Rb_tree_node*										Const_node_ptr;
+	typedef RBT_Node<value_type>								Tree_Node;
+	typedef Tree_Node*											Node_ptr;
+	typedef const Tree_Node*										Const_node_ptr;
 
  protected:
 	Node_ptr														node;
@@ -52,29 +52,29 @@ class rb_tree_reverse_iterator
 	}
 
 	reference operator*(void) const {
-		Node_ptr tmp = Rb_tree_node::predecessor(node);
+		Node_ptr tmp = Tree_Node::predecessor(node);
 		return (tmp->data);
 	}
 
 	rb_tree_reverse_iterator& operator++(void) {
-		node = Rb_tree_node::predecessor(node);
+		node = Tree_Node::predecessor(node);
 		return (*this);
 	}
 
 	rb_tree_reverse_iterator operator++(int) {
 		Node_ptr tmp = node;
-		node = Rb_tree_node::predecessor(node);
+		node = Tree_Node::predecessor(node);
 		return (rb_tree_reverse_iterator(tmp));
 	}
 
 	rb_tree_reverse_iterator& operator--(void) {
-		node = Rb_tree_node::successor(node);
+		node = Tree_Node::successor(node);
 		return (*this);
 	}
 
 	rb_tree_reverse_iterator operator--(int) {
 		Node_ptr tmp = node;
-		node = Rb_tree_node::successor(node);
+		node = Tree_Node::successor(node);
 		return (rb_tree_reverse_iterator(tmp));
 	}
 
