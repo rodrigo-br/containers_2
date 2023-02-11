@@ -245,12 +245,12 @@ private:
 		return (_alloc);
 	};
 
-	Node_ptr search(Key k) const {
-		return (search_helper(root, k));
+	Node_ptr find(Key k) const {
+		return (_find(root, k));
 	};
 
-	Node_ptr search(Key k, Node_ptr _root) const {
-		return (search_helper(_root, k));
+	Node_ptr find(Key k, Node_ptr _root) const {
+		return (_find(_root, k));
 	};
 
 	Node_ptr minimum(Node_ptr node) const {
@@ -270,7 +270,7 @@ private:
 	};
 
 	void insert(value_type data) {
-		Node_ptr z = search(KeyOfValue()(data));
+		Node_ptr z = find(KeyOfValue()(data));
 		if (z != _dummy) {
 			erase_node_helper(z);
 		}
@@ -278,7 +278,7 @@ private:
 	};
 
 	void insert(value_type data, Node_ptr _root) {
-		Node_ptr z = search(KeyOfValue()(data), _root);
+		Node_ptr z = find(KeyOfValue()(data), _root);
 		if (z != _dummy) {
 			erase_node_helper(z);
 		}
@@ -292,7 +292,7 @@ private:
 
 	void erase(Key key)
 		{
-			Node_ptr z = search(key);
+			Node_ptr z = find(key);
 			if (z == _dummy) {
 				return;
 			}
@@ -359,15 +359,15 @@ private:
 		}
 	};
 
-	Node_ptr search_helper(Node_ptr node, Key key) const {
+	Node_ptr _find(Node_ptr node, Key key) const {
 		if (node == _dummy || (!_comp(key, KeyOfValue()(node->data)) &&
 													!_comp(KeyOfValue()(node->data), key))) {
 			return (node);
 		}
 		if (_comp(key, KeyOfValue()(node->data))) {
-			return (search_helper(node->left, key));
+			return (_find(node->left, key));
 		} else {
-			return (search_helper(node->right, key));
+			return (_find(node->right, key));
 		}
 	};
 

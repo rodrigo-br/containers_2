@@ -189,13 +189,11 @@ class map : public CONTAINER {
 	};
 
 	T& at( const Key& key ) {
-		iterator it = find(key);
-		return it->second;
+		return (iterator(find(key))->second);
 	};
 
 	const T& at( const Key& key ) const {
-		const_iterator it = find(key);
-		return it->second;
+		return (const_iterator(find(key))->second);
 	};
 
 	key_compare key_comp(void) const {
@@ -207,21 +205,15 @@ class map : public CONTAINER {
 	};
 
 	iterator find(const key_type& k) {
-		iterator it(_rbtree.search(k));
-		return (it);
+		return iterator(_rbtree.find(k));
 	};
 
 	const_iterator find(const key_type& k) const {
-		const_iterator it(_rbtree.search(k));
-		return (it);
+		return const_iterator(_rbtree.find(k));
 	};
 
 	size_type count(const key_type& k) const {
-		const_iterator it = find(k);
-		if (it != end()) {
-			return (1);
-		}
-		return (0);
+		return (find(k) != end());
 	};
 
 	iterator lower_bound(const key_type& k) {
