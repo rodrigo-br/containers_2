@@ -20,7 +20,7 @@ class rb_tree_reverse_iterator
 	typedef typename iterator_traits<Iterator>::difference_type		difference_type;
 	typedef typename iterator_traits<Iterator>::pointer				pointer;
 	typedef typename iterator_traits<Iterator>::reference			reference;
-	typedef _Rb_tree_node<value_type>								Rb_tree_node;
+	typedef RBT_Node<value_type>								Rb_tree_node;
 	typedef Rb_tree_node*											Node_ptr;
 	typedef const Rb_tree_node*										Const_node_ptr;
 

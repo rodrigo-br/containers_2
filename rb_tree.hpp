@@ -13,10 +13,10 @@ namespace ft {
 #define CONTAINER Container<Val, Alloc>
 template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc = std::allocator<Val> >
 class Rb_tree : public CONTAINER {
-	typedef typename Alloc::template rebind<_Rb_tree_node<Val> >::other Node_allocator;
+	typedef typename Alloc::template rebind<RBT_Node<Val> >::other Node_allocator;
 
  public:
-	typedef _Rb_tree_node<Val>								Rb_tree_node;
+	typedef RBT_Node<Val>								Rb_tree_node;
 	typedef Rb_tree_node*									Node_ptr;
 	typedef const Rb_tree_node*								Const_node_ptr;
 
