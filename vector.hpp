@@ -1,12 +1,12 @@
-#ifndef VECTOR_HPP_
-#define VECTOR_HPP_
+#ifndef VECTOR_H
+#define VECTOR_H
 
 #include <memory>
 #include <stdexcept>
 
 #include "algorithm.hpp"
 #include "iterator_funcs.hpp"
-#include "iterator_random.hpp"
+#include "random_access_iterator.hpp"
 #include "iterator_reverse.hpp"
 #include "iterator_traits.hpp"
 #include "type_traits.hpp"

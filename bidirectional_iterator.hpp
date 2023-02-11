@@ -1,5 +1,5 @@
-#ifndef RB_TREE_ITERATOR_HPP_
-#define RB_TREE_ITERATOR_HPP_
+#ifndef BIDIRECTIONAL_ITERATOR_H
+#define BIDIRECTIONAL_ITERATOR_H
 
 #include "./iterator_traits.hpp"
 #include "./rb_tree_node.hpp"

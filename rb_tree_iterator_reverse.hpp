@@ -1,5 +1,5 @@
-#ifndef RB_TREE_ITERATOR_REVERSE_HPP_
-#define RB_TREE_ITERATOR_REVERSE_HPP_
+#ifndef RB_TREE_ITERATOR_REVERSE_H
+#define RB_TREE_ITERATOR_REVERSE_H
 
 #include "./iterator_traits.hpp"
 #include "./rb_tree_node.hpp"

@@ -1,5 +1,5 @@
-#ifndef ITERATOR_TRAITS_HPP_
-#define ITERATOR_TRAITS_HPP_
+#ifndef ITERATOR_TRAITS_H
+#define ITERATOR_TRAITS_H
 
 #include <cstddef>
 

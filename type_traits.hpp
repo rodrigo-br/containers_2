@@ -1,5 +1,5 @@
-#ifndef TYPE_TRAITS_HPP_
-#define TYPE_TRAITS_HPP_
+#ifndef TYPE_TRAITS_H
+#define TYPE_TRAITS_H
 
 namespace ft {
 

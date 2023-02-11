@@ -1,5 +1,5 @@
-#ifndef RB_TREE_HPP_
-#define RB_TREE_HPP_
+#ifndef RB_TREE_H
+#define RB_TREE_H
 
 #define RB_TREE_TEMPLATE typename Key,				\
 												 typename Val,				\
@@ -12,7 +12,7 @@
 #include <memory>
 
 #include "./algorithm.hpp"
-#include "./rb_tree_iterator.hpp"
+#include "./bidirectional_iterator.hpp"
 #include "./rb_tree_iterator_reverse.hpp"
 #include "./rb_tree_node.hpp"
 

@@ -1,5 +1,5 @@
-#ifndef ITERATOR_REVERSE_HPP_
-#define ITERATOR_REVERSE_HPP_
+#ifndef ITERATOR_REVERSE_H
+#define ITERATOR_REVERSE_H
 
 #include "./iterator_traits.hpp"
 

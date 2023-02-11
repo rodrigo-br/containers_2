@@ -1,5 +1,5 @@
-#ifndef MAP_HPP_
-#define MAP_HPP_
+#ifndef MAP_H
+#define MAP_H
 
 #define MAP_TEMPLATE typename Key,		 \
 										 typename T,			 \
