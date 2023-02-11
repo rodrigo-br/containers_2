@@ -45,7 +45,7 @@ class map : public CONTAINER {
  private:
 	typedef Rb_tree<key_type, value_type, FirstOfPair<value_type>, key_compare, Alloc>
 															Tree_struct;
-	Tree_struct												_rb_tree;
+	Tree_struct												_rbtree;
 
  public:
 	typedef typename Tree_struct::allocator_type			allocator_type;
@@ -57,72 +57,72 @@ class map : public CONTAINER {
 	typedef typename Tree_struct::difference_type			difference_type;
 
 	explicit map(const key_compare& comp = key_compare(),
-				const allocator_type& alloc = allocator_type()) : _rb_tree(comp, alloc)
+				const allocator_type& alloc = allocator_type()) : _rbtree(comp, alloc)
 				{};
 
 	template <class InputIterator>
 	map(InputIterator first, InputIterator last,
 		const key_compare& comp = key_compare(),
-		const allocator_type& alloc = allocator_type()) : _rb_tree(comp, alloc) {
+		const allocator_type& alloc = allocator_type()) : _rbtree(comp, alloc) {
 		while (first != last) {
 			insert(*first);
 			++first;
 		}
 	};
 
-	map(const map& x) : _rb_tree(x._rb_tree) {};
+	map(const map& x) : _rbtree(x._rbtree) {};
 
 	~map(void) {
 		clear();
 	};
 
 	map& operator=(const map& x) {
-		_rb_tree = x._rb_tree;
+		_rbtree = x._rbtree;
 		return (*this);
 	};
 
 	iterator begin(void) {
-		return (_rb_tree.begin());
+		return (_rbtree.begin());
 	};
 
 	const_iterator begin(void) const {
-		return (_rb_tree.begin());
+		return (_rbtree.begin());
 	};
 
 	iterator end(void) {
-		return (_rb_tree.end());
+		return (_rbtree.end());
 	};
 
 	const_iterator end(void) const {
-		return (_rb_tree.end());
+		return (_rbtree.end());
 	};
 
 	reverse_iterator rbegin(void) {
-		return (_rb_tree.rbegin());
+		return (_rbtree.rbegin());
 	};
 
 	const_reverse_iterator rbegin(void) const {
-		return (_rb_tree.rbegin());
+		return (_rbtree.rbegin());
 	};
 
 	reverse_iterator rend(void) {
-		return (_rb_tree.rend());
+		return (_rbtree.rend());
 	};
 
 	const_reverse_iterator rend(void) const {
-		return (_rb_tree.rend());
+		return (_rbtree.rend());
 	};
 
 	bool empty(void) const {
-		return (_rb_tree.empty());
+		return (_rbtree.empty());
 	};
 
 	size_type size(void) const {
-		return (_rb_tree.size());
+		return (_rbtree.size());
 	};
 
 	size_type max_size(void) const {
-		return (_rb_tree.max_size());
+		return (_rbtree.max_size());
 	};
 
 	mapped_type& operator[](const key_type& k) {
@@ -135,7 +135,7 @@ class map : public CONTAINER {
 		if (x != end()) {
 			return (ft::make_pair(x, false));
 		} else {
-			iterator y = _rb_tree.insert_unique(val);
+			iterator y = _rbtree.insert_unique(val);
 			return (ft::make_pair(y, true));
 		}
 	};
@@ -145,7 +145,7 @@ class map : public CONTAINER {
 		if (x != end()) {
 			return (x);
 		} else {
-			_rb_tree.insert(val, position.base());
+			_rbtree.insert(val, position.base());
 			iterator y = find(val.first);
 			return (y);
 		}
@@ -160,12 +160,12 @@ class map : public CONTAINER {
 	};
 
 	void erase(iterator position) {
-		_rb_tree.erase(position->first);
+		_rbtree.erase(position->first);
 	};
 
 	size_type erase(const key_type& k) {
 		if (find(k) != end()) {
-			_rb_tree.erase(k);
+			_rbtree.erase(k);
 			return (1);
 		}
 		return (0);
@@ -176,16 +176,16 @@ class map : public CONTAINER {
 		while (first != last) {
 			it = first;
 			++first;
-			_rb_tree.erase(it->first);
+			_rbtree.erase(it->first);
 		}
 	};
 
 	void swap(map& x) {
-		_rb_tree.swap(x._rb_tree);
+		_rbtree.swap(x._rbtree);
 	};
 
 	void clear(void) {
-		_rb_tree.clear();
+		_rbtree.clear();
 	};
 
 	T& at( const Key& key ) {
@@ -199,20 +199,20 @@ class map : public CONTAINER {
 	};
 
 	key_compare key_comp(void) const {
-		return (_rb_tree.key_comp());
+		return (_rbtree.key_comp());
 	};
 
 	value_compare value_comp(void) const {
-		return (value_compare(_rb_tree.key_comp()));
+		return (value_compare(_rbtree.key_comp()));
 	};
 
 	iterator find(const key_type& k) {
-		iterator it(_rb_tree.search(k));
+		iterator it(_rbtree.search(k));
 		return (it);
 	};
 
 	const_iterator find(const key_type& k) const {
-		const_iterator it(_rb_tree.search(k));
+		const_iterator it(_rbtree.search(k));
 		return (it);
 	};
 
@@ -225,19 +225,19 @@ class map : public CONTAINER {
 	};
 
 	iterator lower_bound(const key_type& k) {
-		return (_rb_tree.lower_bound(k));
+		return (_rbtree.lower_bound(k));
 	};
 
 	const_iterator lower_bound(const key_type& k) const {
-		return (_rb_tree.lower_bound(k));
+		return (_rbtree.lower_bound(k));
 	};
 
 	iterator upper_bound(const key_type& k) {
-		return (_rb_tree.upper_bound(k));
+		return (_rbtree.upper_bound(k));
 	};
 
 	const_iterator upper_bound(const key_type& k) const {
-		return (_rb_tree.upper_bound(k));
+		return (_rbtree.upper_bound(k));
 	};
 
 	ft::pair<iterator, iterator> equal_range(const key_type& k) {
@@ -253,7 +253,7 @@ class map : public CONTAINER {
 	};
 
 	allocator_type get_allocator(void) const {
-		return (_rb_tree.get_allocator());
+		return (_rbtree.get_allocator());
 	};
 
 	template <typename K1, typename T1, typename C1, typename A1>
@@ -274,7 +274,7 @@ void swap(map<Key, T, Compare, Alloc>& lhs, map<Key, T, Compare, Alloc>& rhs) {
 template <class Key, class T, class Compare, class Alloc>
 bool operator==(const map<Key, T, Compare, Alloc>& lhs,
 				const map<Key, T, Compare, Alloc>& rhs) {
-	return (lhs._rb_tree == rhs._rb_tree);
+	return (lhs._rbtree == rhs._rbtree);
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -286,7 +286,7 @@ bool operator!=(const map<Key, T, Compare, Alloc>& lhs,
 template <class Key, class T, class Compare, class Alloc>
 bool operator<(const map<Key, T, Compare, Alloc>& lhs,
 				const map<Key, T, Compare, Alloc>& rhs) {
-	return (lhs._rb_tree < rhs._rb_tree);
+	return (lhs._rbtree < rhs._rbtree);
 }
 
 template <class Key, class T, class Compare, class Alloc>
