@@ -241,15 +241,11 @@ class map : public CONTAINER {
 	};
 
 	ft::pair<iterator, iterator> equal_range(const key_type& k) {
-		iterator lowerBound = lower_bound(k);
-		iterator upperBound = upper_bound(k);
-		return (ft::make_pair(lowerBound, upperBound));
+		return (ft::make_pair(lower_bound(k), upper_bound(k)));
 	};
 
 	ft::pair<const_iterator, const_iterator> equal_range(const key_type& k) const {
-		const_iterator lowerBound = lower_bound(k);
-		const_iterator upperBound = upper_bound(k);
-		return (ft::make_pair(lowerBound, upperBound));
+		return (ft::make_pair(lower_bound(k), upper_bound(k)));
 	};
 
 	allocator_type get_allocator(void) const {
