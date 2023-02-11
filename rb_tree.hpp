@@ -123,23 +123,20 @@ class Rb_tree : public CONTAINER {
 	};
 
 	void swap(Rb_tree& x) {
-		allocator_type tmp_alloc = x._alloc;
-		Node_ptr tmp_root = x.root;
-		Node_ptr tmp_TNULL = x.TNULL;
-		size_type tmp_size = x._size;
-		key_compare tmp_comp = x._comp;
-
-		x._alloc = _alloc;
-		x.root = root;
-		x.TNULL = TNULL;
-		x._size = _size;
-		x._comp = _comp;
-
-		_alloc = tmp_alloc;
-		root = tmp_root;
-		TNULL = tmp_TNULL;
-		_size = tmp_size;
-		_comp = tmp_comp;
+		if (this == &x)
+			return;
+		if (_alloc == x._alloc)
+		{
+			std::swap(root, x.root);
+			std::swap(TNULL, x.TNULL);
+			std::swap(_alloc, x._alloc);
+			std::swap(_size, x._size);
+			std::swap(_comp, x._comp);
+		}
+		else
+		{
+			std::swap(*this, x);
+		}
 	};
 
 	void clear(void) {
