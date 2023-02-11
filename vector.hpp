@@ -43,8 +43,8 @@ class vector {
 	};
 
 	explicit vector(size_type n,
-										const value_type& val = value_type(),
-										const allocator_type& alloc = allocator_type()) {
+					const value_type& val = value_type(),
+					const allocator_type& alloc = allocator_type()) {
 		_alloc = alloc;
 		_data = NULL;
 		_size = 0;
