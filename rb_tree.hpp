@@ -443,7 +443,7 @@ class Rb_tree : public CONTAINER {
 
 	void erase_node_helper(Node_ptr z) {
 		Node_ptr x, y;
-		Rb_tree_color y_original_color;
+		Color y_original_color;
 
 		y = z;
 		y_original_color = y->color;
@@ -529,7 +529,7 @@ class Rb_tree : public CONTAINER {
 		}
 	};
 
-	Tree_Node create_node(value_type data, Rb_tree_color color) {
+	Tree_Node create_node(value_type data, Color color) {
 		return (Tree_Node(data, root, TNULL, TNULL, TNULL, TNULL, color));
 	};
 };

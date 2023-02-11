@@ -3,7 +3,7 @@
 
 namespace ft {
 
-enum Rb_tree_color {
+enum Color {
 	RED = true,
 	BLACK = false
 };
@@ -11,14 +11,14 @@ enum Rb_tree_color {
 template <typename T>
 struct RBT_Node {
 	typedef RBT_Node<T>			Tree_Node;
-	typedef Tree_Node*		Node_ptr;
+	typedef Tree_Node*			Node_ptr;
 	typedef const Tree_Node*	Const_node_ptr;
 
 	explicit RBT_Node(const T& _data, Node_ptr _root, Node_ptr _leaf,
 							Node_ptr _parent = NULL,
 							Node_ptr _left = NULL,
 							Node_ptr _right = NULL,
-							Rb_tree_color _color = BLACK)
+							Color _color = BLACK)
 	: data(_data), root(_root), leaf(_leaf), parent(_parent), left(_left), right(_right), color(_color)
 		{}
 
@@ -28,7 +28,7 @@ struct RBT_Node {
 	Node_ptr				parent;
 	Node_ptr				left;
 	Node_ptr				right;
-	Rb_tree_color			color;
+	Color					color;
 
 	static Node_ptr get_root(Node_ptr node) {
 		return (node->leaf->root);
