@@ -44,17 +44,17 @@ class map : public CONTAINER {
 
  private:
 	typedef Rb_tree<key_type, value_type, FirstOfPair<value_type>, key_compare, Alloc>
-															Rb_tree_type;
-	Rb_tree_type											_rb_tree;
+															Tree_struct;
+	Tree_struct												_rb_tree;
 
  public:
-	typedef typename Rb_tree_type::allocator_type			allocator_type;
-	typedef typename Rb_tree_type::iterator					iterator;
-	typedef typename Rb_tree_type::const_iterator			const_iterator;
-	typedef typename Rb_tree_type::reverse_iterator			reverse_iterator;
-	typedef typename Rb_tree_type::const_reverse_iterator	const_reverse_iterator;
-	typedef typename Rb_tree_type::size_type				size_type;
-	typedef typename Rb_tree_type::difference_type			difference_type;
+	typedef typename Tree_struct::allocator_type			allocator_type;
+	typedef typename Tree_struct::iterator					iterator;
+	typedef typename Tree_struct::const_iterator			const_iterator;
+	typedef typename Tree_struct::reverse_iterator			reverse_iterator;
+	typedef typename Tree_struct::const_reverse_iterator	const_reverse_iterator;
+	typedef typename Tree_struct::size_type					size_type;
+	typedef typename Tree_struct::difference_type			difference_type;
 
 	explicit map(const key_compare& comp = key_compare(),
 				const allocator_type& alloc = allocator_type()) : _rb_tree(comp, alloc)
