@@ -1,13 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
 
-#define MAP_TEMPLATE typename Key,		 \
-										 typename T,			 \
-										 typename Compare, \
-										 typename Alloc
-
-#define MAP_CLASS map<Key, T, Compare, Alloc>
-
 #include <functional>
 #include <memory>
 
@@ -272,54 +265,52 @@ class map {
 
 	template <typename K1, typename T1, typename C1, typename A1>
 	friend bool
-	operator==(const map<K1, T1, C1, A1>&,
-						 const map<K1, T1, C1, A1>&);
+	operator==(const map<K1, T1, C1, A1>&, const map<K1, T1, C1, A1>&);
 
 	template <typename K1, typename T1, typename C1, typename A1>
 	friend bool
-	operator<(const map<K1, T1, C1, A1>&,
-						const map<K1, T1, C1, A1>&);
+	operator<(const map<K1, T1, C1, A1>&, const map<K1, T1, C1, A1>&);
 };
 
 template <class Key, class T, class Compare, class Alloc>
 void swap(map<Key, T, Compare, Alloc>& lhs,
-								map<Key, T, Compare, Alloc>& rhs) {
+			map<Key, T, Compare, Alloc>& rhs) {
 	lhs.swap(rhs);
 }
 
 template <class Key, class T, class Compare, class Alloc>
 bool operator==(const map<Key, T, Compare, Alloc>& lhs,
-								const map<Key, T, Compare, Alloc>& rhs) {
+				const map<Key, T, Compare, Alloc>& rhs) {
 	return (lhs._rb_tree == rhs._rb_tree);
 }
 
 template <class Key, class T, class Compare, class Alloc>
 bool operator!=(const map<Key, T, Compare, Alloc>& lhs,
-								const map<Key, T, Compare, Alloc>& rhs) {
+				const map<Key, T, Compare, Alloc>& rhs) {
 	return (!(lhs == rhs));
 }
 
 template <class Key, class T, class Compare, class Alloc>
 bool operator<(const map<Key, T, Compare, Alloc>& lhs,
-							 const map<Key, T, Compare, Alloc>& rhs) {
+				const map<Key, T, Compare, Alloc>& rhs) {
 	return (lhs._rb_tree < rhs._rb_tree);
 }
 
 template <class Key, class T, class Compare, class Alloc>
 bool operator<=(const map<Key, T, Compare, Alloc>& lhs,
-								const map<Key, T, Compare, Alloc>& rhs) {
+				const map<Key, T, Compare, Alloc>& rhs) {
 	return (!(rhs < lhs));
 }
 
 template <class Key, class T, class Compare, class Alloc>
 bool operator>(const map<Key, T, Compare, Alloc>& lhs,
-							 const map<Key, T, Compare, Alloc>& rhs) {
+				const map<Key, T, Compare, Alloc>& rhs) {
 	return (rhs < lhs);
 }
 
 template <class Key, class T, class Compare, class Alloc>
 bool operator>=(const map<Key, T, Compare, Alloc>& lhs,
-								const map<Key, T, Compare, Alloc>& rhs) {
+				const map<Key, T, Compare, Alloc>& rhs) {
 	return (!(lhs < rhs));
 }
 

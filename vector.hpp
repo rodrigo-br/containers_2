@@ -5,7 +5,6 @@
 #include <stdexcept>
 
 #include "algorithm.hpp"
-#include "iterator_funcs.hpp"
 #include "random_access_iterator.hpp"
 #include "iterator_reverse.hpp"
 #include "iterator_traits.hpp"

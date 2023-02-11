@@ -42,6 +42,16 @@ struct iterator_traits<const T*> {
 	typedef const T& reference;
 };
 
+template <class InputIt>
+typename iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last) {
+	typename iterator_traits<InputIt>::difference_type result = 0;
+	while (first != last) {
+		++first;
+		++result;
+	}
+	return (result);
+};
+
 }
 
 #endif

@@ -1,14 +1,6 @@
 #ifndef RB_TREE_H
 #define RB_TREE_H
 
-#define RB_TREE_TEMPLATE typename Key,				\
-												 typename Val,				\
-												 typename KeyOfValue, \
-												 typename Compare,		\
-												 typename Alloc
-
-#define RB_TREE_CLASS Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>
-
 #include <memory>
 
 #include "./algorithm.hpp"
@@ -549,36 +541,40 @@ class Rb_tree {
 	};
 };
 
-	template <RB_TREE_TEMPLATE>
-	inline bool operator==(const RB_TREE_CLASS& x, const RB_TREE_CLASS& y) {
+	template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+	inline bool operator==(const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& x,
+							const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& y) {
 		return (x.size() == y.size() &&
 						ft::equal(x.begin(), x.end(), y.begin()));
 	}
 
-	template <RB_TREE_TEMPLATE>
-	inline bool operator!=(const RB_TREE_CLASS& x, const RB_TREE_CLASS& y) {
+	template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+	inline bool operator!=(const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& x,
+							const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& y) {
 		return (!(x == y));
 	}
 
-	template <RB_TREE_TEMPLATE>
-	inline bool operator<(const RB_TREE_CLASS& x, const RB_TREE_CLASS& y) {
-		return (ft::lexicographical_compare(x.begin(), x.end(),
-																				y.begin(), y.end()));
+	template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+	inline bool operator<(const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& x,
+							const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& y) {
+		return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()));
 	}
 
-	template <RB_TREE_TEMPLATE>
-	inline bool operator<=(const RB_TREE_CLASS& x, const RB_TREE_CLASS& y) {
+	template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+	inline bool operator<=(const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& x,
+							const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& y) {
 		return (!(y < x));
 	}
 
-	template <RB_TREE_TEMPLATE>
-	inline bool operator>(const RB_TREE_CLASS& x, const RB_TREE_CLASS& y) {
+	template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+	inline bool operator>(const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& x,
+							const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& y) {
 		return (y < x);
 	}
 
-	template <RB_TREE_TEMPLATE>
-	inline bool operator>=(const RB_TREE_CLASS& x,
-												const RB_TREE_CLASS& y) {
+	template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+	inline bool operator>=(const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& x,
+							const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& y) {
 		return (!(x < y));
 	}
 
