@@ -1,5 +1,5 @@
-#ifndef RB_TREE_NODE_H
-#define RB_TREE_NODE_H
+#ifndef RBT_NODE_H
+#define RBT_NODE_H
 
 namespace ft {
 

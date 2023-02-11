@@ -2,7 +2,7 @@
 #define BIDIRECTIONAL_ITERATOR_H
 
 #include "./iterator_traits.hpp"
-#include "./rb_tree_node.hpp"
+#include "./RBT_Node.hpp"
 
 namespace ft {
 
@@ -15,8 +15,8 @@ class rb_tree_iterator : public iterator<std::bidirectional_iterator_tag, Iterat
 	typedef typename iterator_traits<Iterator>::pointer			pointer;
 	typedef typename iterator_traits<Iterator>::reference		reference;
 
-	typedef RBT_Node<value_type>							Tree_Node;
-	typedef Tree_Node*										Node_ptr;
+	typedef RBT_Node<value_type>								Tree_Node;
+	typedef Tree_Node*											Node_ptr;
 	typedef const Tree_Node*									Const_node_ptr;
 
  protected:

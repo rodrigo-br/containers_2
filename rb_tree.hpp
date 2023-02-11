@@ -7,7 +7,7 @@
 #include "./algorithm.hpp"
 #include "./bidirectional_iterator.hpp"
 #include "./reverse_iterator_map.hpp"
-#include "./rb_tree_node.hpp"
+#include "./RBT_Node.hpp"
 
 namespace ft {
 #define CONTAINER Container<Val, Alloc>
@@ -15,14 +15,7 @@ template <typename Key, typename Val, typename KeyOfValue, typename Compare, typ
 class Rb_tree : public CONTAINER {
 	typedef typename Alloc::template rebind<RBT_Node<Val> >::other Node_allocator;
 
- public:
-	typedef RBT_Node<Val>								Tree_Node;
-	typedef Tree_Node*									Node_ptr;
-	typedef const Tree_Node*								Const_node_ptr;
-
- public:
-	typedef Key 											key_type;
-	typedef Compare 										key_compare;
+public:
 	IMPORT_TYPE(value_type);
 	IMPORT_TYPE(pointer);
 	IMPORT_TYPE(const_pointer);
@@ -30,12 +23,23 @@ class Rb_tree : public CONTAINER {
 	IMPORT_TYPE(const_reference);
 	IMPORT_TYPE(size_type);
 	IMPORT_TYPE(difference_type);
+	typedef RBT_Node<Val>									Tree_Node;
+	typedef Tree_Node*										Node_ptr;
+	typedef const Tree_Node*								Const_node_ptr;
+	typedef Key 											key_type;
+	typedef Compare 										key_compare;
 	typedef Node_allocator 									allocator_type;
 	typedef ft::rb_tree_iterator<pointer> 					iterator;
 	typedef ft::rb_tree_iterator<const_pointer> 			const_iterator;
 	typedef ft::rb_tree_reverse_iterator<iterator> 			reverse_iterator;
 	typedef ft::rb_tree_reverse_iterator<const_iterator>	const_reverse_iterator;
 
+private:
+		allocator_type							_alloc;
+		Node_ptr								root;
+		Node_ptr								TNULL;
+		size_type								_size;
+		key_compare								_comp;
  public:
 	explicit Rb_tree(const key_compare& comp = key_compare(),
 					const allocator_type& alloc = allocator_type()) {
@@ -265,11 +269,6 @@ class Rb_tree : public CONTAINER {
 		};
 
 	private:
-		allocator_type							_alloc;
-		Node_ptr								root;
-		Node_ptr								TNULL;
-		size_type								_size;
-		key_compare								_comp;
 
 	void left_rotate(Node_ptr x) {
 		Node_ptr y;
