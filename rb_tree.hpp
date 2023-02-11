@@ -37,25 +37,25 @@ public:
 private:
 		allocator_type							_alloc;
 		Node_ptr								root;
-		Node_ptr								TNULL;
+		Node_ptr								_dummy;
 		size_type								_size;
 		key_compare								_comp;
  public:
 	explicit Rb_tree(const key_compare& comp = key_compare(),
 					const allocator_type& alloc = allocator_type()) {
 		_alloc = alloc;
-		TNULL = _alloc.allocate(1);
-		_alloc.construct(TNULL, create_node(value_type(), BLACK));
-		root = TNULL;
+		_dummy = _alloc.allocate(1);
+		_alloc.construct(_dummy, create_node(value_type(), BLACK));
+		root = _dummy;
 		_size = 0;
 		_comp = comp;
 	};
 
 	Rb_tree(const Rb_tree& src) {
 		_alloc = src._alloc;
-		TNULL = _alloc.allocate(1);
-		_alloc.construct(TNULL, create_node(value_type(), BLACK));
-		root = TNULL;
+		_dummy = _alloc.allocate(1);
+		_alloc.construct(_dummy, create_node(value_type(), BLACK));
+		root = _dummy;
 		copy_rb_tree(src.root);
 		_size = src._size;
 		_comp = src._comp;
@@ -65,9 +65,9 @@ private:
 		if (this != &rhs) {
 			this->~Rb_tree();
 			_alloc = rhs._alloc;
-			TNULL = _alloc.allocate(1);
-			_alloc.construct(TNULL, create_node(value_type(), BLACK));
-			root = TNULL;
+			_dummy = _alloc.allocate(1);
+			_alloc.construct(_dummy, create_node(value_type(), BLACK));
+			root = _dummy;
 			copy_rb_tree(rhs.root);
 			_size = rhs._size;
 			_comp = rhs._comp;
@@ -77,8 +77,8 @@ private:
 
 	~Rb_tree(void) {
 		destructor_helper(root);
-		_alloc.destroy(TNULL);
-		_alloc.deallocate(TNULL, 1);
+		_alloc.destroy(_dummy);
+		_alloc.deallocate(_dummy, 1);
 		_size = 0;
 	};
 
@@ -91,11 +91,11 @@ private:
 	};
 
 	iterator end(void) {
-		return (iterator(TNULL));
+		return (iterator(_dummy));
 	};
 
 	const_iterator end(void) const {
-		return (const_iterator(TNULL));
+		return (const_iterator(_dummy));
 	};
 
 	reverse_iterator rbegin(void) {
@@ -132,7 +132,7 @@ private:
 		if (_alloc == x._alloc)
 		{
 			std::swap(root, x.root);
-			std::swap(TNULL, x.TNULL);
+			std::swap(_dummy, x._dummy);
 			std::swap(_alloc, x._alloc);
 			std::swap(_size, x._size);
 			std::swap(_comp, x._comp);
@@ -145,7 +145,7 @@ private:
 
 	void clear(void) {
 		destructor_helper(root);
-		root = TNULL;
+		root = _dummy;
 		_size = 0;
 	};
 
@@ -154,55 +154,91 @@ private:
 	};
 
 	iterator lower_bound(const key_type& k) {
-		Node_ptr x = root;
-		Node_ptr y = TNULL;
-
-		while (x != TNULL)
-			if (!_comp(KeyOfValue()(x->data), k))
-				y = x, x = x->left;
+		Node_ptr ptr = root;
+		Node_ptr res = NULL;
+		while (ptr != NULL)
+		{
+			if (_comp(k, KeyOfValue()(ptr->data)))
+			{
+				res = ptr;
+				ptr = ptr->left;
+			}
+			else if (_comp(KeyOfValue()(ptr->data), k))
+			{
+				ptr = ptr->right;
+			}
 			else
-				x = x->right;
-
-		return (iterator(y));
+			{
+				return iterator(ptr);
+			}
+		}
+		return iterator(res);
 	};
 
 	const_iterator lower_bound(const key_type& k) const {
-		Node_ptr x = root;
-		Node_ptr y = TNULL;
-
-		while (x != TNULL)
-			if (!_comp(KeyOfValue()(x->data), k))
-				y = x, x = x->left;
+		Node_ptr ptr = root;
+		Node_ptr res = NULL;
+		while (ptr != NULL)
+		{
+			if (_comp(k, KeyOfValue()(ptr->data)))
+			{
+				res = ptr;
+				ptr = ptr->left;
+			}
+			else if (_comp(KeyOfValue()(ptr->data), k))
+			{
+				ptr = ptr->right;
+			}
 			else
-				x = x->right;
-
-		return (const_iterator(y));
+			{
+				return const_iterator(ptr);
+			}
+		}
+		return const_iterator(res);
 	};
 
 	iterator upper_bound(const key_type& k) {
-		Node_ptr x = root;
-		Node_ptr y = TNULL;
-
-		while (x != TNULL)
-			if (_comp(k, KeyOfValue()(x->data)))
-				y = x, x = x->left;
+		Node_ptr ptr = root;
+		Node_ptr res = NULL;
+		while (ptr != NULL)
+		{
+			if (_comp(k, KeyOfValue()(ptr->data)))
+			{
+				res = ptr;
+				ptr = ptr->left;
+			}
+			else if (_comp(KeyOfValue()(ptr->data), k))
+			{
+				ptr = ptr->right;
+			}
 			else
-				x = x->right;
-
-		return (iterator(y));
+			{
+				return iterator(ptr->right);
+			}
+		}
+		return iterator(res);
 	};
 
 	const_iterator upper_bound(const key_type& k) const {
-		Node_ptr x = root;
-		Node_ptr y = TNULL;
-
-		while (x != TNULL)
-			if (_comp(k, KeyOfValue()(x->data)))
-				y = x, x = x->left;
+		Node_ptr ptr = root;
+		Node_ptr res = NULL;
+		while (ptr != NULL)
+		{
+			if (_comp(k, KeyOfValue()(ptr->data)))
+			{
+				res = ptr;
+				ptr = ptr->left;
+			}
+			else if (_comp(KeyOfValue()(ptr->data), k))
+			{
+				ptr = ptr->right;
+			}
 			else
-				x = x->right;
-
-		return (const_iterator(y));
+			{
+				return const_iterator(ptr->right);
+			}
+		}
+		return const_iterator(res);
 	};
 
 	allocator_type get_allocator(void) const {
@@ -235,7 +271,7 @@ private:
 
 	void insert(value_type data) {
 		Node_ptr z = search(KeyOfValue()(data));
-		if (z != TNULL) {
+		if (z != _dummy) {
 			erase_node_helper(z);
 		}
 		insert_node_helper(data);
@@ -243,7 +279,7 @@ private:
 
 	void insert(value_type data, Node_ptr _root) {
 		Node_ptr z = search(KeyOfValue()(data), _root);
-		if (z != TNULL) {
+		if (z != _dummy) {
 			erase_node_helper(z);
 		}
 		insert_node_helper(data);
@@ -257,7 +293,7 @@ private:
 	void erase(Key key)
 		{
 			Node_ptr z = search(key);
-			if (z == TNULL) {
+			if (z == _dummy) {
 				return;
 			}
 			erase_node_helper(z);
@@ -275,12 +311,12 @@ private:
 
 		y = x->right;
 		x->right = y->left;
-		if (y->left != TNULL) {
+		if (y->left != _dummy) {
 			y->left->parent = x;
 		}
 
 		y->parent = x->parent;
-		if (x->parent == TNULL) {
+		if (x->parent == _dummy) {
 			root = y;
 		} else if (x == x->parent->left) {
 			x->parent->left = y;
@@ -297,12 +333,12 @@ private:
 
 		y = x->left;
 		x->left = y->right;
-		if (y->right != TNULL) {
+		if (y->right != _dummy) {
 			y->right->parent = x;
 		}
 
 		y->parent = x->parent;
-		if (x->parent == TNULL) {
+		if (x->parent == _dummy) {
 			root = y;
 		} else if (x == x->parent->right) {
 			x->parent->right = y;
@@ -315,7 +351,7 @@ private:
 	};
 
 	void destructor_helper(Node_ptr node) {
-		if (node != TNULL) {
+		if (node != _dummy) {
 			destructor_helper(node->left);
 			destructor_helper(node->right);
 			_alloc.destroy(node);
@@ -324,7 +360,7 @@ private:
 	};
 
 	Node_ptr search_helper(Node_ptr node, Key key) const {
-		if (node == TNULL || (!_comp(key, KeyOfValue()(node->data)) &&
+		if (node == _dummy || (!_comp(key, KeyOfValue()(node->data)) &&
 													!_comp(KeyOfValue()(node->data), key))) {
 			return (node);
 		}
@@ -337,11 +373,11 @@ private:
 
 	iterator insert_node_helper(value_type data) {
 		Node_ptr x = root;
-		Node_ptr y = TNULL;
+		Node_ptr y = _dummy;
 		Node_ptr z = _alloc.allocate(1);
 		_alloc.construct(z, create_node(data, RED));
 
-		while (x != TNULL) {
+		while (x != _dummy) {
 			y = x;
 			if (_comp(KeyOfValue()(z->data), KeyOfValue()(x->data))) {
 				x = x->left;
@@ -352,19 +388,19 @@ private:
 
 		z->parent = y;
 
-		if (y == TNULL) {
+		if (y == _dummy) {
 			root = z;
 		} else if (_comp(KeyOfValue()(z->data), KeyOfValue()(y->data))) {
 			y->left = z;
 		} else {
 			y->right = z;
-			z->left = TNULL;
-			z->right = TNULL;
+			z->left = _dummy;
+			z->right = _dummy;
 			z->color = RED;
 		}
 
 		insert_fix(z);
-		TNULL->root = root;
+		_dummy->root = root;
 		_size++;
 
 		return(iterator(z));
@@ -430,7 +466,7 @@ private:
 	};
 
 	void transplant(Node_ptr u, Node_ptr v) {
-		if (u->parent == TNULL) {
+		if (u->parent == _dummy) {
 			root = v;
 		} else if (u == u->parent->left) {
 			u->parent->left = v;
@@ -446,10 +482,10 @@ private:
 
 		y = z;
 		y_original_color = y->color;
-		if (z->left == TNULL) {
+		if (z->left == _dummy) {
 			x = z->right;
 			transplant(z, z->right);
-		} else if (z->right == TNULL) {
+		} else if (z->right == _dummy) {
 			x = z->left;
 			transplant(z, z->left);
 		} else {
@@ -475,7 +511,7 @@ private:
 		if (y_original_color == BLACK) {
 			erase_fix(x);
 		}
-		TNULL->root = root;
+		_dummy->root = root;
 		_size--;
 	};
 
@@ -529,7 +565,7 @@ private:
 	};
 
 	Tree_Node create_node(value_type data, Color color) {
-		return (Tree_Node(data, root, TNULL, TNULL, TNULL, TNULL, color));
+		return (Tree_Node(data, root, _dummy, _dummy, _dummy, _dummy, color));
 	};
 };
 #undef CONTAINER
