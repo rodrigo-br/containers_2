@@ -4,6 +4,7 @@
 #include <memory>
 #include <stdexcept>
 
+#include "Container.hpp"
 #include "algorithm.hpp"
 #include "random_access_iterator.hpp"
 #include "reverse_iterator_vec.hpp"
@@ -11,22 +12,22 @@
 #include "type_traits.hpp"
 
 namespace ft {
-
+#define CONTAINER Container<T, Alloc>
 template <class T, class Alloc = std::allocator<T> >
-class vector {
+class vector : public CONTAINER {
  public:
-	typedef T											value_type;
-	typedef Alloc										allocator_type;
-	typedef typename Alloc::reference					reference;
-	typedef typename Alloc::const_reference				const_reference;
-	typedef typename Alloc::pointer						pointer;
-	typedef typename Alloc::const_pointer				const_pointer;
+	IMPORT_TYPE(value_type);
+	IMPORT_TYPE(allocator_type);
+	IMPORT_TYPE(reference);
+	IMPORT_TYPE(const_reference);
+	IMPORT_TYPE(pointer);
+	IMPORT_TYPE(const_pointer);
+	IMPORT_TYPE(difference_type);
+	IMPORT_TYPE(size_type);
 	typedef ft::random_access_iterator<pointer>			iterator;
 	typedef ft::random_access_iterator<const_pointer>	const_iterator;
 	typedef ft::reverse_iterator<iterator>				reverse_iterator;
 	typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
-	typedef ptrdiff_t									difference_type;
-	typedef size_t										size_type;
 
  protected:
 	std::allocator<T>									_alloc;
