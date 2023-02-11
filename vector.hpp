@@ -466,6 +466,7 @@ class vector : public CONTAINER {
 		return (_alloc);
 	};
 };
+#undef CONTAINER
 
 template <class T, class Alloc>
 inline bool operator==(const vector<T, Alloc>& x, const vector<T, Alloc>& y) {

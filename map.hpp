@@ -8,25 +8,25 @@
 #include "./utility.hpp"
 
 namespace ft {
-
+#define CONTAINER Container<ft::pair<const Key, T>, Alloc>
 template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
-class map {
+class map : public CONTAINER {
 	template <typename P>
-	struct _Select1st {
+	struct FirstOfPair {
 		Key operator()(const P& x) const {
 			return (x.first);
 		}
 	};
 
  public:
+	IMPORT_TYPE(value_type);
+	IMPORT_TYPE(reference);
+	IMPORT_TYPE(const_reference);
+	IMPORT_TYPE(pointer);
+	IMPORT_TYPE(const_pointer);
 	typedef Key								key_type;
 	typedef T								mapped_type;
-	typedef ft::pair<const Key, T>			value_type;
 	typedef Compare							key_compare;
-	typedef typename Alloc::reference		reference;
-	typedef typename Alloc::const_reference	const_reference;
-	typedef typename Alloc::pointer			pointer;
-	typedef typename Alloc::const_pointer	const_pointer;
 
 	class value_compare : public std::binary_function<value_type, value_type, bool> {
 		friend class map<Key, T, Compare, Alloc>;
@@ -43,7 +43,7 @@ class map {
 	};
 
  private:
-	typedef Rb_tree<key_type, value_type, _Select1st<value_type>, key_compare, Alloc>
+	typedef Rb_tree<key_type, value_type, FirstOfPair<value_type>, key_compare, Alloc>
 															Rb_tree_type;
 	Rb_tree_type											_rb_tree;
 
@@ -264,6 +264,7 @@ class map {
 	friend bool
 	operator<(const map<K1, T1, C1, A1>&, const map<K1, T1, C1, A1>&);
 };
+#undef CONTAINER
 
 template <class Key, class T, class Compare, class Alloc>
 void swap(map<Key, T, Compare, Alloc>& lhs, map<Key, T, Compare, Alloc>& rhs) {

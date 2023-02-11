@@ -3,15 +3,16 @@
 
 #include <memory>
 
+#include "./Container.hpp"
 #include "./algorithm.hpp"
 #include "./bidirectional_iterator.hpp"
 #include "./reverse_iterator_map.hpp"
 #include "./rb_tree_node.hpp"
 
 namespace ft {
-
+#define CONTAINER Container<Val, Alloc>
 template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc = std::allocator<Val> >
-class Rb_tree {
+class Rb_tree : public CONTAINER {
 	typedef typename Alloc::template rebind<_Rb_tree_node<Val> >::other Node_allocator;
 
  public:
@@ -21,14 +22,14 @@ class Rb_tree {
 
  public:
 	typedef Key 											key_type;
-	typedef Val 											value_type;
 	typedef Compare 										key_compare;
-	typedef value_type* 									pointer;
-	typedef const value_type* 								const_pointer;
-	typedef value_type& 									reference;
-	typedef const value_type& 								const_reference;
-	typedef size_t 											size_type;
-	typedef ptrdiff_t 										difference_type;
+	IMPORT_TYPE(value_type);
+	IMPORT_TYPE(pointer);
+	IMPORT_TYPE(const_pointer);
+	IMPORT_TYPE(reference);
+	IMPORT_TYPE(const_reference);
+	IMPORT_TYPE(size_type);
+	IMPORT_TYPE(difference_type);
 	typedef Node_allocator 									allocator_type;
 	typedef ft::rb_tree_iterator<pointer> 					iterator;
 	typedef ft::rb_tree_iterator<const_pointer> 			const_iterator;
@@ -535,6 +536,7 @@ class Rb_tree {
 		return (Rb_tree_node(data, root, TNULL, TNULL, TNULL, TNULL, color));
 	};
 };
+#undef CONTAINER
 
 	template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
 	inline bool operator==(const Rb_tree<Key, Val, KeyOfValue, Compare, Alloc>& x,
