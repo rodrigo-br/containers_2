@@ -6,7 +6,7 @@
 
 #include "algorithm.hpp"
 #include "random_access_iterator.hpp"
-#include "iterator_reverse.hpp"
+#include "reverse_iterator_vec.hpp"
 #include "iterator_traits.hpp"
 #include "type_traits.hpp"
 
@@ -15,24 +15,24 @@ namespace ft {
 template <class T, class Alloc = std::allocator<T> >
 class vector {
  public:
-	typedef T value_type;
-	typedef Alloc allocator_type;
-	typedef typename Alloc::reference reference;
-	typedef typename Alloc::const_reference const_reference;
-	typedef typename Alloc::pointer pointer;
-	typedef typename Alloc::const_pointer const_pointer;
-	typedef ft::random_access_iterator<pointer> iterator;
-	typedef ft::random_access_iterator<const_pointer> const_iterator;
-	typedef ft::reverse_iterator<iterator> reverse_iterator;
-	typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-	typedef ptrdiff_t difference_type;
-	typedef size_t size_type;
+	typedef T											value_type;
+	typedef Alloc										allocator_type;
+	typedef typename Alloc::reference					reference;
+	typedef typename Alloc::const_reference				const_reference;
+	typedef typename Alloc::pointer						pointer;
+	typedef typename Alloc::const_pointer				const_pointer;
+	typedef ft::random_access_iterator<pointer>			iterator;
+	typedef ft::random_access_iterator<const_pointer>	const_iterator;
+	typedef ft::reverse_iterator<iterator>				reverse_iterator;
+	typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+	typedef ptrdiff_t									difference_type;
+	typedef size_t										size_type;
 
  protected:
-	std::allocator<T> _alloc;
-	pointer _data;
-	size_type _capacity;
-	size_type _size;
+	std::allocator<T>									_alloc;
+	pointer												_data;
+	size_type											_capacity;
+	size_type											_size;
 
  public:
 	explicit vector(const allocator_type& alloc = allocator_type()) {

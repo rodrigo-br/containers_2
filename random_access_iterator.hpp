@@ -6,18 +6,17 @@
 namespace ft {
 
 template <typename Iterator>
-class random_access_iterator : public iterator<std::random_access_iterator_tag,
-																							 Iterator> {
+class random_access_iterator : public iterator<std::random_access_iterator_tag, Iterator> {
  protected:
-	Iterator current;
+	Iterator														current;
 
  public:
-	typedef Iterator iterator_type;
-	typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
-	typedef typename iterator_traits<Iterator>::value_type value_type;
-	typedef typename iterator_traits<Iterator>::difference_type difference_type;
-	typedef typename iterator_traits<Iterator>::pointer pointer;
-	typedef typename iterator_traits<Iterator>::reference reference;
+	typedef Iterator												iterator_type;
+	typedef typename iterator_traits<Iterator>::iterator_category	iterator_category;
+	typedef typename iterator_traits<Iterator>::value_type			value_type;
+	typedef typename iterator_traits<Iterator>::difference_type		difference_type;
+	typedef typename iterator_traits<Iterator>::pointer				pointer;
+	typedef typename iterator_traits<Iterator>::reference			reference;
 
  public:
 	random_access_iterator(void) : current(NULL) {}
@@ -172,6 +171,6 @@ operator-(const random_access_iterator<IteratorL>& lhs,
 	return (lhs.base() - rhs.base());
 }
 
-}
+};
 
 #endif

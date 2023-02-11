@@ -7,21 +7,20 @@
 namespace ft {
 
 template <typename Iterator>
-class rb_tree_iterator : public iterator<std::bidirectional_iterator_tag,
-																				 Iterator> {
+class rb_tree_iterator : public iterator<std::bidirectional_iterator_tag, Iterator> {
  public:
-	typedef Iterator iterator_type;
-	typedef typename iterator_traits<Iterator>::value_type value_type;
-	typedef typename iterator_traits<Iterator>::difference_type difference_type;
-	typedef typename iterator_traits<Iterator>::pointer pointer;
-	typedef typename iterator_traits<Iterator>::reference reference;
+	typedef Iterator 											iterator_type;
+	typedef typename iterator_traits<Iterator>::value_type		value_type;
+	typedef typename iterator_traits<Iterator>::difference_type	difference_type;
+	typedef typename iterator_traits<Iterator>::pointer			pointer;
+	typedef typename iterator_traits<Iterator>::reference		reference;
 
-	typedef _Rb_tree_node<value_type> Rb_tree_node;
-	typedef Rb_tree_node* Node_ptr;
-	typedef const Rb_tree_node* Const_node_ptr;
+	typedef _Rb_tree_node<value_type>							Rb_tree_node;
+	typedef Rb_tree_node*										Node_ptr;
+	typedef const Rb_tree_node*									Const_node_ptr;
 
  protected:
-	Node_ptr node;
+	Node_ptr													node;
 
  public:
 	rb_tree_iterator(void) : node(NULL) {}

@@ -5,44 +5,39 @@
 
 #include "./algorithm.hpp"
 #include "./bidirectional_iterator.hpp"
-#include "./rb_tree_iterator_reverse.hpp"
+#include "./reverse_iterator_map.hpp"
 #include "./rb_tree_node.hpp"
 
 namespace ft {
 
-template <typename Key,
-					typename Val,
-					typename KeyOfValue,
-					typename Compare,
-					typename Alloc = std::allocator<Val> >
+template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc = std::allocator<Val> >
 class Rb_tree {
-	typedef typename Alloc::template rebind<_Rb_tree_node<Val> >::other
-			Node_allocator;
+	typedef typename Alloc::template rebind<_Rb_tree_node<Val> >::other Node_allocator;
 
  public:
-	typedef _Rb_tree_node<Val> Rb_tree_node;
-	typedef Rb_tree_node* Node_ptr;
-	typedef const Rb_tree_node* Const_node_ptr;
+	typedef _Rb_tree_node<Val>								Rb_tree_node;
+	typedef Rb_tree_node*									Node_ptr;
+	typedef const Rb_tree_node*								Const_node_ptr;
 
  public:
-	typedef Key key_type;
-	typedef Val value_type;
-	typedef Compare key_compare;
-	typedef value_type* pointer;
-	typedef const value_type* const_pointer;
-	typedef value_type& reference;
-	typedef const value_type& const_reference;
-	typedef size_t size_type;
-	typedef ptrdiff_t difference_type;
-	typedef Node_allocator allocator_type;
-	typedef ft::rb_tree_iterator<pointer> iterator;
-	typedef ft::rb_tree_iterator<const_pointer> const_iterator;
-	typedef ft::rb_tree_reverse_iterator<iterator> reverse_iterator;
-	typedef ft::rb_tree_reverse_iterator<const_iterator> const_reverse_iterator;
+	typedef Key 											key_type;
+	typedef Val 											value_type;
+	typedef Compare 										key_compare;
+	typedef value_type* 									pointer;
+	typedef const value_type* 								const_pointer;
+	typedef value_type& 									reference;
+	typedef const value_type& 								const_reference;
+	typedef size_t 											size_type;
+	typedef ptrdiff_t 										difference_type;
+	typedef Node_allocator 									allocator_type;
+	typedef ft::rb_tree_iterator<pointer> 					iterator;
+	typedef ft::rb_tree_iterator<const_pointer> 			const_iterator;
+	typedef ft::rb_tree_reverse_iterator<iterator> 			reverse_iterator;
+	typedef ft::rb_tree_reverse_iterator<const_iterator>	const_reverse_iterator;
 
  public:
 	explicit Rb_tree(const key_compare& comp = key_compare(),
-									 const allocator_type& alloc = allocator_type()) {
+					const allocator_type& alloc = allocator_type()) {
 		_alloc = alloc;
 		TNULL = _alloc.allocate(1);
 		_alloc.construct(TNULL, create_node(value_type(), BLACK));
@@ -272,11 +267,11 @@ class Rb_tree {
 		};
 
 	private:
-		allocator_type _alloc;
-		Node_ptr root;
-		Node_ptr TNULL;
-		size_type _size;
-		key_compare _comp;
+		allocator_type							_alloc;
+		Node_ptr								root;
+		Node_ptr								TNULL;
+		size_type								_size;
+		key_compare								_comp;
 
 	void left_rotate(Node_ptr x) {
 		Node_ptr y;
