@@ -176,33 +176,35 @@ class vector : public CONTAINER {
 		return (const_reverse_iterator(begin()));
 	};
 
-	size_type size(void) const {
-		return (_size);
-	};
+	size_type size(void) const { return (_size); };
 
-	size_type max_size(void) const {
-		return (_alloc.max_size());
-	};
+	size_type max_size(void) const { return (_alloc.max_size()); };
 
 	void resize(size_type n, value_type val = value_type()) {
-		while (n < _size) {
-			pop_back();
-		}
-		if (n > _capacity) {
-			reserve(n);
-		}
-		while (n > _size) {
-			push_back(val);
-		}
+		value_type *newData;
+			newData = _alloc.allocate(n);
+			if (!newData) { throw std::bad_alloc(); }
+			size_type max_size = n > _size ? _size : n;
+			_size = 0;
+			for (size_type i = 0; i < max_size; i++) {
+				_alloc.construct(&newData[i], _data[i]);
+				_size++;
+			}
+			if (_size < n) {
+				for (size_type i = _size; i < n; i++) {
+					_alloc.construct(&newData[i], val);
+					_size++;
+				}
+			}
+			_alloc.deallocate(_data, _capacity);
+			_data = newData;
+			if (n > _capacity)
+				_capacity = n;
 	};
 
-	size_type capacity(void) const {
-		return (_capacity);
-	};
+	size_type capacity(void) const { return (_capacity); };
 
-	bool empty(void) const {
-		return (begin() == end());
-	};
+	bool empty(void) const { return _size == 0; };
 
 	void reserve(size_type n) {
 		if (n > _capacity) {
