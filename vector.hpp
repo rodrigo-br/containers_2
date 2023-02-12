@@ -376,11 +376,11 @@ class vector : public CONTAINER {
 	template <class InputIterator>
 	void insert(iterator position, InputIterator first, InputIterator last) {
 		typedef typename ft::is_integral<InputIterator>::type Integral;
-		insert_dispatch(position, first, last, Integral());
+		_insert(position, first, last, Integral());
 	};
 
 	template <class Integer>
-	void insert_dispatch(iterator position,
+	void _insert(iterator position,
 												size_type n, const Integer& val, true_type) {
 		size_type distance = ft::distance(begin(), position);
 		if (_capacity == 0) {
@@ -399,7 +399,7 @@ class vector : public CONTAINER {
 	};
 
 	template <class InputIterator>
-	void insert_dispatch(iterator position,
+	void _insert(iterator position,
 												InputIterator first, InputIterator last, false_type) {
 		size_type distance = ft::distance(begin(), position);
 		size_type n = ft::distance(first, last);
