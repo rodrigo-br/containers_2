@@ -32,6 +32,10 @@ clean:
 
 fclean:		clean
 			rm -rf $(NAME)
+			rm -rf ftvector.txt
+			rm -rf stdvector.txt
+			rm -rf ftmap.txt
+			rm -rf stdmap.txt
 
 re:			fclean all
 
