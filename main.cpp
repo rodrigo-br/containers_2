@@ -84,6 +84,12 @@ void test_vector()
 
 		old_foo.swap(old_bar);
 		os << std::boolalpha;
+		os << (old_foo == new_bar) << "\n";
+		os << (old_bar == old_bar) << "\n";
+		os << (old_foo < old_bar) << "\n";
+		os << (old_foo > old_bar) << "\n";
+		os << (old_foo <= old_bar) << "\n";
+		os << (old_foo >= old_bar) << "\n";
 		os << (old_foo.size() == 5) << "\n";
 		os << (old_bar.size() == 3) << "\n";
 
@@ -161,6 +167,13 @@ void test_map()
 			<< anothermap.end()->second << "\n"
 			<< anothermap.rbegin()->first << "\n"
 			<< anothermap.rbegin()->second << "\n";
+		os << std::boolalpha;
+		os << (mymap == anothermap) << "\n";
+		os << (mymap != anothermap) << "\n";
+		os << (mymap < anothermap) << "\n";
+		os << (mymap > anothermap) << "\n";
+		os << (mymap <= anothermap) << "\n";
+		os << (mymap >= anothermap) << "\n";
 	}
 	std::cout << PRINTNS <<"::map time: " << (time_now() - start) << std::endl;
 }

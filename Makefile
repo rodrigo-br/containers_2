@@ -35,7 +35,7 @@ clean:
 			@rm -rf $(OBJS)
 			@rm -rf leaks.txt
 
-fclean:		clean
+fclean:		clean cleantxt
 			@rm -rf std_containers
 			@rm -rf ft_containers
 
@@ -66,9 +66,9 @@ cleantxt:
 		rm -rf ftmap.txt
 		rm -rf stdmap.txt
 
-complete: fclean all
+complete: re
 			@./ft_containers
-			@make fclean
+			@make clean
 			@make all STD=1
 			@./std_containers
 			@make diff

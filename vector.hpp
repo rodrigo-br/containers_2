@@ -65,6 +65,7 @@ class vector : public CONTAINER {
 		__vector(first, last, Integral());
 	};
 
+private:
 	template <typename Integer>
 	void __vector(Integer n, Integer value, true_type) {
 		_data = _alloc.allocate(n);
@@ -89,6 +90,7 @@ class vector : public CONTAINER {
 		std::uninitialized_copy(first, last, _data);
 	};
 
+public:
 	vector(const vector &other) : _alloc(other.get_allocator()),
 	_capacity(other.capacity()), _size(other.size()) {
 		_data = _alloc.allocate(_capacity);
@@ -127,6 +129,7 @@ class vector : public CONTAINER {
 		_assign(first, last, Integral());
 	};
 
+private:
 	template <typename Integer>
 	void _assign(Integer n, Integer val, true_type) {
 		clear();
@@ -144,6 +147,7 @@ class vector : public CONTAINER {
 		}
 	};
 
+public:
 	void clear(void) {
 		for (iterator it = begin(); it != end(); it++) {
 			_alloc.destroy(it.base());
@@ -187,6 +191,7 @@ class vector : public CONTAINER {
 		_insert(position, first, last, Integral());
 	};
 
+private:
 	template <class Integer>
 	void _insert(iterator position, size_type n, const Integer& val, true_type) {
 		size_type distance = ft::distance(begin(), position);
@@ -223,6 +228,7 @@ class vector : public CONTAINER {
 		}
 	};
 
+public:
 	allocator_type get_allocator(void) const { return (_alloc); };
 
 	reference at(size_type n) {
