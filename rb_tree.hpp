@@ -13,6 +13,7 @@ namespace ft {
 #define CONTAINER Container<Val, Alloc>
 template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc = std::allocator<Val> >
 class Rb_tree : public CONTAINER {
+private:
 	typedef typename Alloc::template rebind<RBT_Node<Val> >::other Node_allocator;
 
 public:
@@ -35,8 +36,8 @@ public:
 	typedef ft::rb_tree_reverse_iterator<const_iterator>	const_reverse_iterator;
 
 private:
+		Node_ptr								_root;
 		allocator_type							_alloc;
-		Node_ptr								root;
 		Node_ptr								_dummy;
 		size_type								_size;
 		key_compare								_comp;
@@ -46,7 +47,7 @@ private:
 		_alloc = alloc;
 		_dummy = _alloc.allocate(1);
 		_alloc.construct(_dummy, create_node(value_type(), BLACK));
-		root = _dummy;
+		_root = _dummy;
 		_size = 0;
 		_comp = comp;
 	};
@@ -54,8 +55,8 @@ private:
 	Rb_tree(const Rb_tree& src) : _alloc(src._alloc), _comp(src._comp), _size(src._size) {
 		_dummy = _alloc.allocate(1);
 		_alloc.construct(_dummy, create_node(value_type(), BLACK));
-		root = _dummy;
-		copy(src.root);
+		_root = _dummy;
+		copy(src._root);
 	};
 
 	Rb_tree& operator=(const Rb_tree& rhs) {
@@ -64,8 +65,8 @@ private:
 			_alloc = rhs._alloc;
 			_dummy = _alloc.allocate(1);
 			_alloc.construct(_dummy, create_node(value_type(), BLACK));
-			root = _dummy;
-			copy(rhs.root);
+			_root = _dummy;
+			copy(rhs._root);
 			_size = rhs._size;
 			_comp = rhs._comp;
 		}
@@ -73,18 +74,18 @@ private:
 	};
 
 	~Rb_tree(void) {
-		_clear(root);
+		_clear(_root);
 		_alloc.destroy(_dummy);
 		_alloc.deallocate(_dummy, 1);
 		_size = 0;
 	};
 
 	iterator begin(void) {
-		return (iterator(minimum(root)));
+		return (iterator(minimum(_root)));
 	};
 
 	const_iterator begin(void) const {
-		return (const_iterator(minimum(root)));
+		return (const_iterator(minimum(_root)));
 	};
 
 	iterator end(void) {
@@ -128,7 +129,7 @@ private:
 			return;
 		if (_alloc == x._alloc)
 		{
-			std::swap(root, x.root);
+			std::swap(_root, x._root);
 			std::swap(_dummy, x._dummy);
 			std::swap(_alloc, x._alloc);
 			std::swap(_size, x._size);
@@ -141,8 +142,8 @@ private:
 	};
 
 	void clear(void) {
-		_clear(root);
-		root = _dummy;
+		_clear(_root);
+		_root = _dummy;
 		_size = 0;
 	};
 
@@ -151,7 +152,7 @@ private:
 	};
 
 	iterator lower_bound(const key_type& k) {
-		Node_ptr ptr = root;
+		Node_ptr ptr = _root;
 		Node_ptr res = NULL;
 		while (ptr != NULL)
 		{
@@ -173,7 +174,7 @@ private:
 	};
 
 	const_iterator lower_bound(const key_type& k) const {
-		Node_ptr ptr = root;
+		Node_ptr ptr = _root;
 		Node_ptr res = NULL;
 		while (ptr != NULL)
 		{
@@ -195,7 +196,7 @@ private:
 	};
 
 	iterator upper_bound(const key_type& k) {
-		Node_ptr ptr = root;
+		Node_ptr ptr = _root;
 		Node_ptr res = NULL;
 		while (ptr != NULL)
 		{
@@ -217,7 +218,7 @@ private:
 	};
 
 	const_iterator upper_bound(const key_type& k) const {
-		Node_ptr ptr = root;
+		Node_ptr ptr = _root;
 		Node_ptr res = NULL;
 		while (ptr != NULL)
 		{
@@ -243,11 +244,11 @@ private:
 	};
 
 	Node_ptr find(Key k) const {
-		return (_find(root, k));
+		return (_find(_root, k));
 	};
 
-	Node_ptr find(Key k, Node_ptr _root) const {
-		return (_find(_root, k));
+	Node_ptr find(Key k, Node_ptr root) const {
+		return (_find(root, k));
 	};
 
 	Node_ptr minimum(Node_ptr node) const {
@@ -274,8 +275,8 @@ private:
 		_insert(data);
 	};
 
-	void insert(value_type data, Node_ptr _root) {
-		Node_ptr z = find(KeyOfValue()(data), _root);
+	void insert(value_type data, Node_ptr root) {
+		Node_ptr z = find(KeyOfValue()(data), root);
 		if (z != _dummy) {
 			_erase(z);
 		}
@@ -296,9 +297,9 @@ private:
 			_erase(z);
 		};
 
-	Node_ptr get_root(void)
+	Node_ptr getroot(void)
 		{
-		return (root);
+		return (_root);
 		};
 
 	private:
@@ -314,7 +315,7 @@ private:
 
 		y->parent = x->parent;
 		if (x->parent == _dummy) {
-			root = y;
+			_root = y;
 		} else if (x == x->parent->left) {
 			x->parent->left = y;
 		} else {
@@ -336,7 +337,7 @@ private:
 
 		y->parent = x->parent;
 		if (x->parent == _dummy) {
-			root = y;
+			_root = y;
 		} else if (x == x->parent->right) {
 			x->parent->right = y;
 		} else {
@@ -369,7 +370,7 @@ private:
 	};
 
 	iterator _insert(value_type data) {
-		Node_ptr x = root;
+		Node_ptr x = _root;
 		Node_ptr y = _dummy;
 		Node_ptr z = _alloc.allocate(1);
 		_alloc.construct(z, create_node(data, RED));
@@ -386,7 +387,7 @@ private:
 		z->parent = y;
 
 		if (y == _dummy) {
-			root = z;
+			_root = z;
 		} else if (_comp(KeyOfValue()(z->data), KeyOfValue()(y->data))) {
 			y->left = z;
 		} else {
@@ -397,7 +398,7 @@ private:
 		}
 
 		insert_fix(z);
-		_dummy->root = root;
+		_dummy->root = _root;
 		_size++;
 
 		return(iterator(z));
@@ -406,7 +407,7 @@ private:
 	void erase_fix(Node_ptr x) {
 		Node_ptr w;
 
-		while (x != root && x->color == BLACK) {
+		while (x != _root && x->color == BLACK) {
 			if (x == x->parent->left) {
 				w = x->parent->right;
 
@@ -430,7 +431,7 @@ private:
 					x->parent->color = BLACK;
 					w->right->color = BLACK;
 					left_rotate(x->parent);
-					x = root;
+					x = _root;
 				}
 			} else {
 				w = x->parent->left;
@@ -455,7 +456,7 @@ private:
 					x->parent->color = BLACK;
 					w->left->color = BLACK;
 					right_rotate(x->parent);
-					x = root;
+					x = _root;
 				}
 			}
 		}
@@ -464,7 +465,7 @@ private:
 
 	void transplant(Node_ptr u, Node_ptr v) {
 		if (u->parent == _dummy) {
-			root = v;
+			_root = v;
 		} else if (u == u->parent->left) {
 			u->parent->left = v;
 		} else {
@@ -508,7 +509,7 @@ private:
 		if (y_original_color == BLACK) {
 			erase_fix(x);
 		}
-		_dummy->root = root;
+		_dummy->root = _root;
 		_size--;
 	};
 
@@ -550,7 +551,7 @@ private:
 				}
 			}
 		}
-		root->color = BLACK;
+		_root->color = BLACK;
 	};
 
 	void copy(Node_ptr node) {
@@ -562,7 +563,7 @@ private:
 	};
 
 	Tree_Node create_node(value_type data, Color color) {
-		return (Tree_Node(data, root, _dummy, _dummy, _dummy, _dummy, color));
+		return (Tree_Node(data, _root, _dummy, _dummy, _dummy, _dummy, color));
 	};
 };
 #undef CONTAINER
