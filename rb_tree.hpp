@@ -434,7 +434,7 @@ private:
 	void erase_fix(Node_ptr x) {
 		Node_ptr w;
 
-		while (x != _root && x->color == BLACK) {
+		while (x != _root && isNullOrBlack(x)) {
 			if (x == x->parent->left) {
 				w = x->parent->right;
 
@@ -454,7 +454,7 @@ private:
 						right_rotate(w);
 						w = x->parent->right;
 					}
-					setColor(w, x->parent->color);
+					setColor(w, getColor(x->parent));
 					setColor(x->parent, BLACK);
 					setColor(w->right, BLACK);
 					left_rotate(x->parent);
@@ -463,31 +463,31 @@ private:
 			} else {
 				w = x->parent->left;
 
-				if (w->color == RED) {
-					w->color = BLACK;
-					x->parent->color = RED;
+				if (isRed(w)) {
+					setColor(w, BLACK);
+					setColor(x->parent, RED);
 					right_rotate(x->parent);
 					w = x->parent->left;
 				}
-				if (w->right->color == BLACK && w->left->color == BLACK) {
-					w->color = RED;
+				if (isNullOrBlack(w->right) && isNullOrBlack(w->left)) {
+					setColor(w, RED);
 					x = x->parent;
 				} else {
-					if (w->left->color == BLACK) {
-						w->right->color = BLACK;
-						w->color = RED;
+					if (isBlack(w->left)) {
+						setColor(w->right, BLACK);
+						setColor(w, RED);
 						left_rotate(w);
 						w = x->parent->left;
 					}
-					w->color = x->parent->color;
-					x->parent->color = BLACK;
-					w->left->color = BLACK;
+					setColor(w, getColor(x->parent));
+					setColor(x->parent, BLACK);
+					setColor(w->left, BLACK);
 					right_rotate(x->parent);
 					x = _root;
 				}
 			}
 		}
-		x->color = BLACK;
+		setColor(x, BLACK);
 	};
 
 	void transplant(Node_ptr u, Node_ptr v) {
@@ -506,7 +506,7 @@ private:
 		Color y_original_color;
 
 		y = z;
-		y_original_color = y->color;
+		y_original_color = getColor(y);
 		if (z->left == _dummy) {
 			x = z->right;
 			transplant(z, z->right);
@@ -515,7 +515,7 @@ private:
 			transplant(z, z->left);
 		} else {
 			y = minimum(z->right);
-			y_original_color = y->color;
+			y_original_color = getColor(y);
 			x = y->right;
 			if (z != z->right) {
 				transplant(y, y->right);
@@ -527,7 +527,7 @@ private:
 			transplant(z, y);
 			y->left = z->left;
 			y->left->parent = y;
-			y->color = z->color;
+			setColor(y, getColor(z));
 		}
 
 		_alloc.destroy(z);
@@ -543,42 +543,42 @@ private:
 	void insert_fix(Node_ptr z) {
 		Node_ptr y;
 
-		while (z->parent->color == RED) {
+		while (isRed(z->parent)) {
 			if (z->parent == z->parent->parent->left) {
 				y = z->parent->parent->right;
-				if (y->color == RED) {
-					z->parent->color = BLACK;
-					y->color = BLACK;
-					z->parent->parent->color = RED;
+				if (isRed(y)) {
+					setColor(z->parent, BLACK);
+					setColor(y, BLACK);
+					setColor(z->parent->parent, RED);
 					z = z->parent->parent;
 				} else {
 					if (z == z->parent->right) {
 						z = z->parent;
 						left_rotate(z);
 					}
-					z->parent->color = BLACK;
-					z->parent->parent->color = RED;
+					setColor(z->parent, BLACK);
+					setColor(z->parent->parent, RED);
 					right_rotate(z->parent->parent);
 				}
 			} else {
 				y = z->parent->parent->left;
-				if (y->color == RED) {
-					z->parent->color = BLACK;
-					y->color = BLACK;
-					z->parent->parent->color = RED;
+				if (isRed(y)) {
+					setColor(z->parent, BLACK);
+					setColor(y, BLACK);
+					setColor(z->parent->parent, RED);
 					z = z->parent->parent;
 				} else {
 					if (z == z->parent->left) {
 						z = z->parent;
 						right_rotate(z);
 					}
-					z->parent->color = BLACK;
-					z->parent->parent->color = RED;
+					setColor(z->parent, BLACK);
+					setColor(z->parent->parent, RED);
 					left_rotate(z->parent->parent);
 				}
 			}
 		}
-		_root->color = BLACK;
+		setColor(_root, BLACK);
 	};
 
 	void copy(Node_ptr node) {
