@@ -36,41 +36,31 @@ class vector : public CONTAINER {
 	size_type											_size;
 
  public:
-	explicit vector(const allocator_type& alloc = allocator_type()) {
-		_alloc = alloc;
-		_data = NULL;
-		_size = 0;
-		_capacity = 0;
-	};
+	explicit vector(const allocator_type& alloc = allocator_type())
+	: _alloc(alloc), _data(NULL), _capacity(0), _size(0) {};
 
-	explicit vector(size_type n,
-					const value_type& val = value_type(),
-					const allocator_type& alloc = allocator_type()) {
-		_alloc = alloc;
-		_data = NULL;
-		_size = 0;
-		_capacity = 0;
-		if (n > max_size()) {
+	explicit vector(size_type size,
+					const value_type& value = value_type(),
+					const allocator_type& alloc = allocator_type())
+	: _alloc(alloc), _data(NULL), _capacity(0), _size(0) {
+		if (size > max_size()) {
 			throw std::length_error("length_error");
 		}
-		_data = _alloc.allocate(n);
+		_data = _alloc.allocate(size);
 		if (_data == NULL) {
 			throw std::bad_alloc();
 		}
-		for (size_t i = 0; i < n; i++) {
-			_alloc.construct(_data + i, val);
+		for (size_t i = 0; i < size; i++) {
+			_alloc.construct(_data + i, value);
 			_size++;
 		}
-		_capacity = n;
+		_capacity = size;
 	};
 
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last,
-					const allocator_type& alloc = allocator_type()) {
-		_alloc = alloc;
-		_data = NULL;
-		_size = 0;
-		_capacity = 0;
+					const allocator_type& alloc = allocator_type())
+		: _alloc(alloc), _data(NULL), _capacity(0), _size(0) {
 		typedef typename ft::is_integral<InputIterator>::type Integral;
 		__vector(first, last, Integral());
 	};
@@ -206,31 +196,29 @@ class vector : public CONTAINER {
 
 	bool empty(void) const { return _size == 0; };
 
-	void reserve(size_type n) {
-		if (n > _capacity) {
-			if (n > max_size()) {
-				throw std::length_error("length_error");
-			}
-			pointer tmp = _alloc.allocate(n);
-			if (tmp == NULL) {
-				throw std::bad_alloc();
-			}
-			for (size_t i = 0; i < _size; i++) {
-				_alloc.construct(tmp + i, _data[i]);
-				_alloc.destroy(_data + i);
-			}
-			_alloc.deallocate(_data, _capacity);
-			_data = tmp;
-			_capacity = n;
+	void reserve(size_type new_cap) {
+		if (new_cap > max_size()) { throw std::length_error("cavalinho"); }
+		if (new_cap <= _capacity) { return ; }
+
+		pointer newData = _alloc.allocate(new_cap);
+		if (!newData) { throw std::bad_alloc(); }
+		std::uninitialized_copy(begin(), end(), newData);
+		for (size_type i = 0; i < _size; i++) {
+			_alloc.destroy(&_data[i]);
 		}
+		_alloc.deallocate(_data, _capacity);
+		_data = newData;
+		_capacity = new_cap;
 	};
 
-	reference operator[](size_type n) {
-		return (*(begin() + n));
+	const_reference operator[](size_type index) const {
+		if (index >= _size) { throw std::out_of_range("cavalinho"); }
+		return _data[index];
 	};
 
-	const_reference operator[](size_type n) const {
-		return (*(begin() + n));
+	reference operator[](size_type index) {
+		if (index >= _size) { throw std::out_of_range("cavalinho"); }
+		return _data[index];
 	};
 
 	reference at(size_type n) {
