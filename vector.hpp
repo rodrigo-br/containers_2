@@ -264,11 +264,11 @@ class vector : public CONTAINER {
 	template <class InputIterator>
 	void assign(InputIterator first, InputIterator last) {
 		typedef typename ft::is_integral<InputIterator>::type Integral;
-		assign_dispatch(first, last, Integral());
+		_assign(first, last, Integral());
 	};
 
 	template <typename Integer>
-	void assign_dispatch(Integer n, Integer val, true_type) {
+	void _assign(Integer n, Integer val, true_type) {
 		for (size_t i = 0; i < _size; i++) {
 			_alloc.destroy(&_data[i]);
 		}
@@ -287,7 +287,7 @@ class vector : public CONTAINER {
 	};
 
 	template <typename InputIterator>
-	void assign_dispatch(InputIterator first, InputIterator last, false_type) {
+	void _assign(InputIterator first, InputIterator last, false_type) {
 		for (size_t i = 0; i < _size; i++) {
 			_alloc.destroy(&_data[i]);
 		}
