@@ -6,7 +6,7 @@ TEST_SRC	=	$(addprefix ../tests/, $(shell ls ../tests/ | grep tests_*))
 
 OBJS	=	$(SRCS:.cpp=.o)
 
-NAME	=	containers
+NAME	=	ft_containers
 
 CC 		=	c++
 
@@ -20,6 +20,7 @@ endif
 
 ifdef STD
 	CFLAGS += -D STD
+	NAME = std_containers
 endif
 
 %.o: %.cpp
@@ -35,7 +36,8 @@ clean:
 			@rm -rf leaks.txt
 
 fclean:		clean
-			@rm -rf $(NAME)
+			@rm -rf std_containers
+			@rm -rf ft_containers
 
 re:			fclean all
 
@@ -65,8 +67,8 @@ cleantxt:
 		rm -rf stdmap.txt
 
 complete: fclean all
-			@./$(NAME)
+			@./ft_containers
 			@make fclean
 			@make all STD=1
-			@./$(NAME)
+			@./std_containers
 			@make diff
