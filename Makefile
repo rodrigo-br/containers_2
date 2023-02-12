@@ -59,7 +59,14 @@ diff:
 		@echo
 
 cleantxt:
-			rm -rf ftvector.txt
-			rm -rf stdvector.txt
-			rm -rf ftmap.txt
-			rm -rf stdmap.txt
+		rm -rf ftvector.txt
+		rm -rf stdvector.txt
+		rm -rf ftmap.txt
+		rm -rf stdmap.txt
+
+complete: fclean all
+			./$(NAME)
+		  make fclean
+		  make all STD=1
+		  ./$(NAME)
+		  make diff

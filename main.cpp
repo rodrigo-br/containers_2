@@ -54,8 +54,6 @@ void write_vector(vector<T> &v, std::ofstream& os) {
 		<< *v.rend() << "\n";
 }
 
-
-
 void test_vector()
 {
 	size_t start = time_now();
