@@ -121,6 +121,13 @@ class vector : public CONTAINER {
 		return *this;
 	};
 
+	void clear(void) {
+		for (iterator it = begin(); it != end(); it++) {
+			_alloc.destroy(it.base());
+		}
+		_size = 0;
+	};
+
 	iterator begin(void) {
 		return (iterator(_data));
 	};
@@ -433,10 +440,6 @@ class vector : public CONTAINER {
 			std::swap(_data, x._data);
 		}
 		else { std::swap(*this, x); }
-	};
-
-	void clear(void) {
-		erase(begin(), end());
 	};
 
 	allocator_type get_allocator(void) const {
