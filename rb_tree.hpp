@@ -51,14 +51,11 @@ private:
 		_comp = comp;
 	};
 
-	Rb_tree(const Rb_tree& src) {
-		_alloc = src._alloc;
+	Rb_tree(const Rb_tree& src) : _alloc(src._alloc), _comp(src._comp), _size(src._size) {
 		_dummy = _alloc.allocate(1);
 		_alloc.construct(_dummy, create_node(value_type(), BLACK));
 		root = _dummy;
-		copy_rb_tree(src.root);
-		_size = src._size;
-		_comp = src._comp;
+		copy(src.root);
 	};
 
 	Rb_tree& operator=(const Rb_tree& rhs) {
@@ -68,7 +65,7 @@ private:
 			_dummy = _alloc.allocate(1);
 			_alloc.construct(_dummy, create_node(value_type(), BLACK));
 			root = _dummy;
-			copy_rb_tree(rhs.root);
+			copy(rhs.root);
 			_size = rhs._size;
 			_comp = rhs._comp;
 		}
@@ -556,11 +553,11 @@ private:
 		root->color = BLACK;
 	};
 
-	void copy_rb_tree(Node_ptr node) {
+	void copy(Node_ptr node) {
 		if (node != node->leaf) {
 			insert_unique(node->data);
-			copy_rb_tree(node->left);
-			copy_rb_tree(node->right);
+			copy(node->left);
+			copy(node->right);
 		}
 	};
 
