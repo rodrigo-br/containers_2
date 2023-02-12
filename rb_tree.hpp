@@ -73,7 +73,7 @@ private:
 	};
 
 	~Rb_tree(void) {
-		destructor_helper(root);
+		_clear(root);
 		_alloc.destroy(_dummy);
 		_alloc.deallocate(_dummy, 1);
 		_size = 0;
@@ -141,7 +141,7 @@ private:
 	};
 
 	void clear(void) {
-		destructor_helper(root);
+		_clear(root);
 		root = _dummy;
 		_size = 0;
 	};
@@ -347,10 +347,10 @@ private:
 		x->parent = y;
 	};
 
-	void destructor_helper(Node_ptr node) {
+	void _clear(Node_ptr node) {
 		if (node != _dummy) {
-			destructor_helper(node->left);
-			destructor_helper(node->right);
+			_clear(node->left);
+			_clear(node->right);
 			_alloc.destroy(node);
 			_alloc.deallocate(node, 1);
 		}
