@@ -69,6 +69,11 @@ private:
 	};
 
  public:
+
+ /*****************************************************************************\
+ * 					CONSTRUCTORS / DESTRUCTOR								   *
+ \*****************************************************************************/
+
 	explicit Rb_tree(const key_compare& comp = key_compare(),
 					const allocator_type& alloc = allocator_type())
 		: _alloc(alloc), _dummy(_alloc.allocate(1)), _size(0), _comp(comp) {
@@ -230,33 +235,19 @@ private:
 		return const_iterator(res);
 	};
 
-	allocator_type get_allocator(void) const {
-		return (_alloc);
-	};
+	allocator_type get_allocator(void) const { return (_alloc); };
 
-	Node_ptr find(Key k) const {
-		return (_find(_root, k));
-	};
+	Node_ptr find(Key k) const { return (_find(_root, k)); };
 
-	Node_ptr find(Key k, Node_ptr root) const {
-		return (_find(root, k));
-	};
+	Node_ptr find(Key k, Node_ptr root) const { return (_find(root, k)); };
 
-	Node_ptr minimum(Node_ptr node) const {
-		return (Tree_Node::minimum(node));
-	};
+	Node_ptr minimum(Node_ptr node) const { return (Tree_Node::minimum(node)); };
 
-	Node_ptr maximum(Node_ptr node) const {
-		return (Tree_Node::maximum(node));
-	};
+	Node_ptr maximum(Node_ptr node) const { return (Tree_Node::maximum(node)); };
 
-	Node_ptr successor(Node_ptr x) const {
-		return (Tree_Node::successor(x));
-	};
+	Node_ptr successor(Node_ptr x) const { return (Tree_Node::successor(x)); };
 
-	Node_ptr predecessor(Node_ptr x) const {
-		return (Tree_Node::predecessor(x));
-	};
+	Node_ptr predecessor(Node_ptr x) const { return (Tree_Node::predecessor(x)); };
 
 	void insert(value_type data) {
 		Node_ptr z = find(KeyOfValue()(data));
@@ -274,31 +265,22 @@ private:
 		_insert(data);
 	};
 
-	iterator insert_unique(value_type data)
-		{
-			return(_insert(data));
-		};
+	iterator insert_unique(value_type data) { return(_insert(data)); };
 
 	void erase(Key key)
-		{
-			Node_ptr z = find(key);
-			if (z == _dummy) {
-				return;
-			}
-			_erase(z);
-		};
+	{
+		Node_ptr z = find(key);
+		if (z == _dummy) {
+			return;
+		}
+		_erase(z);
+	};
 	
-	iterator begin(void) {
-		return (iterator(minimum(_root)));
-	};
+	iterator begin(void) { return (iterator(minimum(_root))); };
 
-	const_iterator begin(void) const {
-		return (const_iterator(minimum(_root)));
-	};
+	const_iterator begin(void) const { return (const_iterator(minimum(_root))); };
 
-	iterator end(void) {
-		return (iterator(_dummy));
-	};
+	iterator end(void) { return (iterator(_dummy)); };
 
 	const_iterator end(void) const {
 		return (const_iterator(_dummy));

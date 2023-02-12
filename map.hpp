@@ -28,6 +28,9 @@ class map : public CONTAINER {
 	typedef T								mapped_type;
 	typedef Compare							key_compare;
 
+ /*****************************************************************************\
+ * 							MEMBER CLASS			 						   *
+ \*****************************************************************************/
 	class value_compare : public std::binary_function<value_type, value_type, bool> {
 		friend class map<Key, T, Compare, Alloc>;
 
@@ -56,6 +59,10 @@ class map : public CONTAINER {
 	typedef typename Tree_struct::size_type					size_type;
 	typedef typename Tree_struct::difference_type			difference_type;
 
+ /*****************************************************************************\
+ * 					CONSTRUCTORS / DESTRUCTOR								   *
+ \*****************************************************************************/
+
 	explicit map(const key_compare& comp = key_compare(),
 				const allocator_type& alloc = allocator_type()) : _rbtree(comp, alloc)
 				{};
@@ -80,6 +87,27 @@ class map : public CONTAINER {
 		_rbtree = x._rbtree;
 		return (*this);
 	};
+
+ /*****************************************************************************\
+ * 							ELEMENT ACCESS		 							   *
+ \*****************************************************************************/
+
+	mapped_type& at( const Key& key ) {
+		return (iterator(find(key))->second);
+	};
+
+	const mapped_type& at( const Key& key ) const {
+		return (const_iterator(find(key))->second);
+	};
+
+	mapped_type& operator[](const key_type& k) {
+		iterator x = insert(begin(), ft::make_pair(k, mapped_type()));
+		return (x->second);
+	};
+
+ /*****************************************************************************\
+ * 							ITERATORS			 							   *
+ \*****************************************************************************/
 
 	iterator begin(void) {
 		return (_rbtree.begin());
@@ -113,6 +141,10 @@ class map : public CONTAINER {
 		return (_rbtree.rend());
 	};
 
+ /*****************************************************************************\
+ * 							CAPACITY			 							   *
+ \*****************************************************************************/
+
 	bool empty(void) const {
 		return (_rbtree.empty());
 	};
@@ -125,10 +157,9 @@ class map : public CONTAINER {
 		return (_rbtree.max_size());
 	};
 
-	mapped_type& operator[](const key_type& k) {
-		iterator x = insert(begin(), ft::make_pair(k, mapped_type()));
-		return (x->second);
-	};
+ /*****************************************************************************\
+ * 							MODIFIERS			 							   *
+ \*****************************************************************************/
 
 	ft::pair<iterator, bool> insert(const value_type& val) {
 		iterator x = find(val.first);
@@ -188,21 +219,9 @@ class map : public CONTAINER {
 		_rbtree.clear();
 	};
 
-	T& at( const Key& key ) {
-		return (iterator(find(key))->second);
-	};
-
-	const T& at( const Key& key ) const {
-		return (const_iterator(find(key))->second);
-	};
-
-	key_compare key_comp(void) const {
-		return (_rbtree.key_comp());
-	};
-
-	value_compare value_comp(void) const {
-		return (value_compare(_rbtree.key_comp()));
-	};
+ /*****************************************************************************\
+ * 							LOOKUP				 							   *
+ \*****************************************************************************/
 
 	iterator find(const key_type& k) {
 		return iterator(_rbtree.find(k));
@@ -240,8 +259,20 @@ class map : public CONTAINER {
 		return (ft::make_pair(lower_bound(k), upper_bound(k)));
 	};
 
+ /*****************************************************************************\
+ * 							OBSERVERS			 							   *
+ \*****************************************************************************/
+
 	allocator_type get_allocator(void) const {
 		return (_rbtree.get_allocator());
+	};
+
+	key_compare key_comp(void) const {
+		return (_rbtree.key_comp());
+	};
+
+	value_compare value_comp(void) const {
+		return (value_compare(_rbtree.key_comp()));
 	};
 
 	template <typename K1, typename T1, typename C1, typename A1>
