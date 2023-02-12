@@ -225,45 +225,53 @@ class vector : public CONTAINER {
 
 	allocator_type get_allocator(void) const { return (_alloc); };
 
-	iterator begin(void) {
-		return (iterator(_data));
+	reference at(size_type n) {
+		if (n >= _size) { throw std::out_of_range("cavalinho"); }
+		return _data[n]; 
 	};
 
-	const_iterator begin(void) const {
-		return (const_iterator(_data));
+	const_reference at(size_type n) const {
+		if (n >= _size) { throw std::out_of_range("cavalinho"); }
+		return _data[n];
 	};
 
-	iterator end(void) {
-		return (iterator(_data + _size));
+	reference front(void) {
+		if (_size == 0) { throw std::out_of_range("cavalinho"); }
+		return _data[0];
+	};
+	
+	const_reference front(void) const { 
+		if (_size == 0) { throw std::out_of_range("cavalinho"); }
+		return _data[0]; 
 	};
 
-	T* data() {
-			return _data;
+	reference back(void) {
+		if (_size == 0) { throw std::out_of_range("cavalinho"); }
+		return _data[_size - 1];
+	};
+	
+	const_reference back(void) const {
+		if (_size == 0) { throw std::out_of_range("cavalinho"); }
+		return _data[_size - 1];
 	};
 
-	const T* data() const {
-			return _data;
-	};
+	value_type* data(void) { return _data; };
 
-	const_iterator end(void) const {
-		return (const_iterator(_data + _size));
-	};
+	iterator begin() { return iterator(_data); };
 
-	reverse_iterator rbegin(void) {
-		return (reverse_iterator(end()));
-	};
+	const_iterator begin() const { return const_iterator(_data); };
 
-	const_reverse_iterator rbegin(void) const {
-		return (const_reverse_iterator(end()));
-	};
+	iterator end() { return iterator(_data + _size); };
 
-	reverse_iterator rend(void) {
-		return (reverse_iterator(begin()));
-	};
+	const_iterator end() const { return const_iterator(_data + _size); };
 
-	const_reverse_iterator rend(void) const {
-		return (const_reverse_iterator(begin()));
-	};
+	reverse_iterator rbegin(void) {	return reverse_iterator(end()); };
+
+	const_reverse_iterator rbegin(void) const {	return const_reverse_iterator(end()); };
+
+	reverse_iterator rend(void) { return reverse_iterator(begin()); };
+
+	const_reverse_iterator rend(void) const { return const_reverse_iterator(begin()); };
 
 	size_type size(void) const { return (_size); };
 
@@ -318,36 +326,6 @@ class vector : public CONTAINER {
 	reference operator[](size_type index) {
 		if (index >= _size) { throw std::out_of_range("cavalinho"); }
 		return _data[index];
-	};
-
-	reference at(size_type n) {
-		if (n < 0 || n >= _size) {
-			throw std::out_of_range("out_of_range");
-		}
-		return (*(begin() + n));
-	};
-
-	const_reference at(size_type n) const {
-		if (n < 0 || n >= _size) {
-			throw std::out_of_range("out_of_range");
-		}
-		return (*(begin() + n));
-	};
-
-	reference front(void) {
-		return (*begin());
-	};
-
-	const_reference front(void) const {
-		return (*begin());
-	};
-
-	reference back(void) {
-		return (*(end() - 1));
-	};
-
-	const_reference back(void) const {
-		return (*(end() - 1));
 	};
 
 	void push_back(const value_type& val) {
