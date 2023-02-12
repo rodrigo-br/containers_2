@@ -331,48 +331,37 @@ private:
 
 	private:
 
-	void left_rotate(Node_ptr x) {
-		Node_ptr y;
+	Node_ptr &getRefNode(Node_ptr x)
+	{
+		if (x == _root)
+			return _root;
+		Node_ptr parent = x->parent;
 
-		y = x->right;
-		x->right = y->left;
-		if (y->left != _dummy) {
-			y->left->parent = x;
-		}
-
-		y->parent = x->parent;
-		if (x->parent == _dummy) {
-			_root = y;
-		} else if (x == x->parent->left) {
-			x->parent->left = y;
-		} else {
-			x->parent->right = y;
-		}
-
-		y->left = x;
-		x->parent = y;
+		return (parent->left == x ? parent->left : parent->right);
 	};
 
-	void right_rotate(Node_ptr x) {
-		Node_ptr y;
+	void rotateLeft(Node_ptr n) {
+		Node_ptr &rp = this->getRefNode(n);
 
-		y = x->left;
-		x->left = y->right;
-		if (y->right != _dummy) {
-			y->right->parent = x;
-		}
+		rp = n->right;
+		n->right = rp->left;
+		rp->left = n;
+		if (n->right != NULL)
+			n->right->parent = n;
+		rp->parent = n->parent;
+		n->parent = rp;
+	};
 
-		y->parent = x->parent;
-		if (x->parent == _dummy) {
-			_root = y;
-		} else if (x == x->parent->right) {
-			x->parent->right = y;
-		} else {
-			x->parent->left = y;
-		}
+	void rotateRight(Node_ptr m) {
+		Node_ptr &rp = this->getRefNode(m);
 
-		y->right = x;
-		x->parent = y;
+		rp = m->left;
+		m->left = rp->right;
+		rp->right = m;
+		if (m->left != NULL)
+			m->left->parent = m;
+		rp->parent = m->parent;
+		m->parent = rp;
 	};
 
 	void _clear(Node_ptr node) {
@@ -441,7 +430,7 @@ private:
 				if (isRed(w)) {
 					setColor(w, BLACK);
 					setColor(x->parent, RED);
-					left_rotate(x->parent);
+					rotateLeft(x->parent);
 					w = x->parent->right;
 				}
 				if (isNullOrBlack(w->left) && isNullOrBlack(w->right)) {
@@ -451,13 +440,13 @@ private:
 					if (isNullOrBlack(w->right)) {
 						setColor(w->left, BLACK);
 						setColor(w, RED);
-						right_rotate(w);
+						rotateRight(w);
 						w = x->parent->right;
 					}
 					setColor(w, getColor(x->parent));
 					setColor(x->parent, BLACK);
 					setColor(w->right, BLACK);
-					left_rotate(x->parent);
+					rotateLeft(x->parent);
 					x = _root;
 				}
 			} else {
@@ -466,7 +455,7 @@ private:
 				if (isRed(w)) {
 					setColor(w, BLACK);
 					setColor(x->parent, RED);
-					right_rotate(x->parent);
+					rotateRight(x->parent);
 					w = x->parent->left;
 				}
 				if (isNullOrBlack(w->right) && isNullOrBlack(w->left)) {
@@ -476,13 +465,13 @@ private:
 					if (isBlack(w->left)) {
 						setColor(w->right, BLACK);
 						setColor(w, RED);
-						left_rotate(w);
+						rotateLeft(w);
 						w = x->parent->left;
 					}
 					setColor(w, getColor(x->parent));
 					setColor(x->parent, BLACK);
 					setColor(w->left, BLACK);
-					right_rotate(x->parent);
+					rotateRight(x->parent);
 					x = _root;
 				}
 			}
@@ -554,11 +543,11 @@ private:
 				} else {
 					if (z == z->parent->right) {
 						z = z->parent;
-						left_rotate(z);
+						rotateLeft(z);
 					}
 					setColor(z->parent, BLACK);
 					setColor(z->parent->parent, RED);
-					right_rotate(z->parent->parent);
+					rotateRight(z->parent->parent);
 				}
 			} else {
 				y = z->parent->parent->left;
@@ -570,11 +559,11 @@ private:
 				} else {
 					if (z == z->parent->left) {
 						z = z->parent;
-						right_rotate(z);
+						rotateRight(z);
 					}
 					setColor(z->parent, BLACK);
 					setColor(z->parent->parent, RED);
-					left_rotate(z->parent->parent);
+					rotateLeft(z->parent->parent);
 				}
 			}
 		}
