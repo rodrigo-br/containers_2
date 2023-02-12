@@ -41,6 +41,33 @@ private:
 		Node_ptr								_dummy;
 		size_type								_size;
 		key_compare								_comp;
+
+	static Color getColor(Const_node_ptr x)
+	{
+		return (x == NULL ? BLACK : x->color);
+	};
+
+	static void setColor(Node_ptr x, Color c)
+	{
+		if (x != NULL)
+			x->color = c;
+	};
+
+	static bool isRed(Const_node_ptr x)
+	{
+		return (getColor(x) == RED);
+	};
+
+	static bool isBlack(Const_node_ptr x)
+	{
+		return (getColor(x) == BLACK);
+	};
+
+	static bool isNullOrBlack(Const_node_ptr x)
+	{
+		return (x == NULL || isBlack(x));
+	};
+
  public:
 	explicit Rb_tree(const key_compare& comp = key_compare(),
 					const allocator_type& alloc = allocator_type()) {
@@ -394,7 +421,7 @@ private:
 			y->right = z;
 			z->left = _dummy;
 			z->right = _dummy;
-			z->color = RED;
+			setColor(z, RED);
 		}
 
 		insert_fix(z);
@@ -411,25 +438,25 @@ private:
 			if (x == x->parent->left) {
 				w = x->parent->right;
 
-				if (w->color == RED) {
-					w->color = BLACK;
-					x->parent->color = RED;
+				if (isRed(w)) {
+					setColor(w, BLACK);
+					setColor(x->parent, RED);
 					left_rotate(x->parent);
 					w = x->parent->right;
 				}
-				if (w->left->color == BLACK && w->right->color == BLACK) {
-					w->color = RED;
+				if (isNullOrBlack(w->left) && isNullOrBlack(w->right)) {
+					setColor(w, RED);
 					x = x->parent;
 				} else {
-					if (w->right->color == BLACK) {
-						w->left->color = BLACK;
-						w->color = RED;
+					if (isNullOrBlack(w->right)) {
+						setColor(w->left, BLACK);
+						setColor(w, RED);
 						right_rotate(w);
 						w = x->parent->right;
 					}
-					w->color = x->parent->color;
-					x->parent->color = BLACK;
-					w->right->color = BLACK;
+					setColor(w, x->parent->color);
+					setColor(x->parent, BLACK);
+					setColor(w->right, BLACK);
 					left_rotate(x->parent);
 					x = _root;
 				}
