@@ -23,7 +23,6 @@
 	#define FILEMAP "stdmap.txt"
 #endif
 
-
 size_t	time_now(void)
 {
 	struct timeval	time;
