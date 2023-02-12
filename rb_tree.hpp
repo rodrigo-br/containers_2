@@ -269,22 +269,22 @@ private:
 	void insert(value_type data) {
 		Node_ptr z = find(KeyOfValue()(data));
 		if (z != _dummy) {
-			erase_node_helper(z);
+			_erase(z);
 		}
-		insert_node_helper(data);
+		_insert(data);
 	};
 
 	void insert(value_type data, Node_ptr _root) {
 		Node_ptr z = find(KeyOfValue()(data), _root);
 		if (z != _dummy) {
-			erase_node_helper(z);
+			_erase(z);
 		}
-		insert_node_helper(data);
+		_insert(data);
 	};
 
 	iterator insert_unique(value_type data)
 		{
-			return(insert_node_helper(data));
+			return(_insert(data));
 		};
 
 	void erase(Key key)
@@ -293,7 +293,7 @@ private:
 			if (z == _dummy) {
 				return;
 			}
-			erase_node_helper(z);
+			_erase(z);
 		};
 
 	Node_ptr get_root(void)
@@ -368,7 +368,7 @@ private:
 		}
 	};
 
-	iterator insert_node_helper(value_type data) {
+	iterator _insert(value_type data) {
 		Node_ptr x = root;
 		Node_ptr y = _dummy;
 		Node_ptr z = _alloc.allocate(1);
@@ -473,7 +473,7 @@ private:
 		v->parent = u->parent;
 	};
 
-	void erase_node_helper(Node_ptr z) {
+	void _erase(Node_ptr z) {
 		Node_ptr x, y;
 		Color y_original_color;
 

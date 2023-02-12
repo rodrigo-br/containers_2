@@ -72,11 +72,11 @@ class vector : public CONTAINER {
 		_size = 0;
 		_capacity = 0;
 		typedef typename ft::is_integral<InputIterator>::type Integral;
-		initialize_dispatch(first, last, Integral());
+		__vector(first, last, Integral());
 	};
 
 	template <typename Integer>
-	void initialize_dispatch(Integer n, Integer value, true_type) {
+	void __vector(Integer n, Integer value, true_type) {
 		_data = _alloc.allocate(n);
 		if (_data == NULL) {
 			throw std::bad_alloc();
@@ -89,7 +89,7 @@ class vector : public CONTAINER {
 	};
 
 	template <typename InputIterator>
-	void initialize_dispatch(InputIterator first, InputIterator last, false_type) {
+	void __vector(InputIterator first, InputIterator last, false_type) {
 		_size = ft::distance(first, last);
 		_capacity = _size;
 		_data = _alloc.allocate(_size);
