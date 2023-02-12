@@ -49,13 +49,13 @@ test:	$(TEST)
 
 diff:
 		@echo
-		@echo "ftvector & stdvector"
+		@echo "diff ftvector & stdvector"
 		@echo
-		@diff -y ftvector.txt stdvector.txt
+		@diff ftvector.txt stdvector.txt
 		@echo
-		@echo "ftmap & stdmap"
+		@echo "diff ftmap & stdmap"
 		@echo
-		@diff -y ftmap.txt stdmap.txt
+		@diff ftmap.txt stdmap.txt
 		@echo
 
 cleantxt:

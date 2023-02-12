@@ -322,10 +322,7 @@ class vector : public CONTAINER {
 	};
 
 	void pop_back(void) {
-		if (_size) {
-			_alloc.destroy(_data + _size - 1);
-			_size--;
-		}
+		erase(end() - 1);
 	};
 
 	iterator insert(iterator position, const value_type& val) {
@@ -422,26 +419,25 @@ class vector : public CONTAINER {
 	};
 
 	iterator erase(iterator position) {
-		if (position + 1 != end()) {
-			std::copy(position.base() + 1, end().base(), position.base());
-		}
-		--_size;
-		if (!ft::is_integral<value_type>::value) {
-			_alloc.destroy(_data + _size);
-		}
-		return (position);
+		if (position == end())
+				return position;
+			std::copy(position + 1, end(), position);
+			_alloc.destroy(end().base());
+			_size--;
+			return position;
 	};
 
 	iterator erase(iterator first, iterator last) {
-		iterator it(std::copy(last.base(), end().base(), first.base()));
-		if (!ft::is_integral<value_type>::value) {
-			while (it != end()) {
-				_alloc.destroy(it.base());
-				++it;
+		if (first == end() || first == last)
+				return first;
+			iterator return_iterator = first;
+			std::copy(last.base(), end().base(), first.base());
+			while (first != last) {
+				_alloc.destroy(first.base());
+				_size--;
+				first++;
 			}
-		}
-		_size -= (last - first);
-		return (first);
+		return return_iterator;
 	};
 
 	void swap(vector& x) {
