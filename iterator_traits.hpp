@@ -74,6 +74,7 @@ typename iterator_traits<InputIt>::difference_type distance(InputIt first, Input
 	return (result);
 };
 
+#define IMPORT_TRAIT(TYPE) typedef typename TRAITS::TYPE TYPE
 }
 
 #endif

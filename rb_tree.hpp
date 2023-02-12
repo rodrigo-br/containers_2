@@ -24,16 +24,16 @@ public:
 	IMPORT_TYPE(const_reference);
 	IMPORT_TYPE(size_type);
 	IMPORT_TYPE(difference_type);
-	typedef RBT_Node<Val>									Tree_Node;
-	typedef Tree_Node*										Node_ptr;
-	typedef const Tree_Node*								Const_node_ptr;
-	typedef Key 											key_type;
-	typedef Compare 										key_compare;
-	typedef Node_allocator 									allocator_type;
-	typedef ft::rb_tree_iterator<pointer> 					iterator;
-	typedef ft::rb_tree_iterator<const_pointer> 			const_iterator;
-	typedef ft::rb_tree_reverse_iterator<iterator> 			reverse_iterator;
-	typedef ft::rb_tree_reverse_iterator<const_iterator>	const_reverse_iterator;
+	typedef RBT_Node<Val>								Tree_Node;
+	typedef Tree_Node*									Node_ptr;
+	typedef const Tree_Node*							Const_node_ptr;
+	typedef Key 										key_type;
+	typedef Compare 									key_compare;
+	typedef Node_allocator 								allocator_type;
+	typedef ft::bidirectional_iterator<pointer> 		iterator;
+	typedef ft::bidirectional_iterator<const_pointer> 	const_iterator;
+	typedef ft::rbt_reverse_iterator<iterator> 			reverse_iterator;
+	typedef ft::rbt_reverse_iterator<const_iterator>	const_reverse_iterator;
 
 private:
 		Node_ptr								_root;
