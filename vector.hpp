@@ -89,12 +89,11 @@ class vector : public CONTAINER {
 		std::uninitialized_copy(first, last, _data);
 	};
 
-	vector(const vector& x) {
-		_alloc = x._alloc;
-		_data = NULL;
-		_size = 0;
-		_capacity = 0;
-		*this = x;
+	vector(const vector &other) : _alloc(other.get_allocator()),
+	_capacity(other.capacity()), _size(other.size()) {
+		_data = _alloc.allocate(_capacity);
+		if (!_data) { throw std::bad_alloc(); }
+		std::uninitialized_copy(other.begin(), other.end(), _data);
 	};
 
 	~vector(void) {
@@ -108,22 +107,18 @@ class vector : public CONTAINER {
 		_capacity = 0;
 	};
 
-	vector& operator=(const vector& x) {
-		if (*this != x) {
-			for (size_t i = 0; i < _size; i++) {
-				_alloc.destroy(&_data[i]);
-			}
-			if (_capacity > 0) {
-				_alloc.deallocate(_data, _size);
-			}
-			_size = x.size();
-			_capacity = x.capacity();
-			_data = _alloc.allocate(_capacity);
-			for (size_t i = 0; i < _size; i++) {
-				_alloc.construct(&_data[i], x._data[i]);
-			}
+	vector& operator=(const vector& other) {
+		this->clear();
+		_alloc = other.get_allocator();
+		_alloc.deallocate(_data, _capacity);
+		_size = other.size();
+		_capacity = other.capacity();
+		_data = _alloc.allocate(_capacity);
+		if (!_data) { throw std::bad_alloc(); }
+		for (size_type i = 0; i < _size; i++) {
+			_alloc.construct(&_data[i], other[i]);
 		}
-		return (*this);
+		return *this;
 	};
 
 	iterator begin(void) {
