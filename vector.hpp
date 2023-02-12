@@ -121,12 +121,109 @@ class vector : public CONTAINER {
 		return *this;
 	};
 
+	template <class InputIterator>
+	void assign(InputIterator first, InputIterator last) {
+		typedef typename ft::is_integral<InputIterator>::type Integral;
+		_assign(first, last, Integral());
+	};
+
+	template <typename Integer>
+	void _assign(Integer n, Integer val, true_type) {
+		clear();
+		for (size_type i = 0; i < n; i++) {
+			push_back(val);
+		}
+	};
+
+	template <typename InputIterator>
+	void _assign(InputIterator first, InputIterator last, false_type) {
+		clear();
+		while (first != last) {
+			push_back(*first);
+			first++;
+		}
+	};
+
 	void clear(void) {
 		for (iterator it = begin(); it != end(); it++) {
 			_alloc.destroy(it.base());
 		}
 		_size = 0;
 	};
+
+	iterator insert(iterator pos, const T& value) {
+		size_type index = pos - begin();
+		if (_size + 1 > _capacity) {
+			reserve(_size + 1);
+		}
+		for (size_type i = _size; i >= index && i-- > 0;) {
+			_alloc.construct(&_data[i + 1], _data[i]);
+			_alloc.destroy(&_data[i]);
+		}
+		_alloc.construct(&_data[index], value);
+		_size++;
+		return begin() + index;
+	};
+
+	iterator insert(iterator pos, size_type count, const T& value) {
+		size_type index = pos - begin();
+		if (_size + count > _capacity) {
+			reserve(_size + count);
+		}
+		for (size_type i = _size; i >= index && i-- > 0;) {
+			_alloc.construct(&_data[i + count], _data[i]);
+			_alloc.destroy(&_data[i]);
+		}
+		for (size_type i = index; i < index + count; i++) {
+			_alloc.construct(&_data[i], value);
+		}
+		_size += count;
+		return begin() + index;
+	};
+
+	template <class InputIterator>
+	void insert(iterator position, InputIterator first, InputIterator last) {
+		typedef typename ft::is_integral<InputIterator>::type Integral;
+		_insert(position, first, last, Integral());
+	};
+
+	template <class Integer>
+	void _insert(iterator position, size_type n, const Integer& val, true_type) {
+		size_type distance = ft::distance(begin(), position);
+		if (_capacity == 0) {
+			reserve(n);
+			_size = n;
+			for (size_t i = 0; i < n; i++)
+				_alloc.construct(&_data[distance + i], val);
+			return;
+		}
+		if (_capacity < (_size + n)) {
+			reserve(_capacity * 2);
+		}
+		for (size_t i = 0; i < n; i++) {
+			insert(begin() + distance, val);
+		}
+	};
+
+	template <class InputIt>
+	void _insert(iterator pos, InputIt first, InputIt last, false_type) {
+		size_type index = pos - begin();
+		if (_size + (last - first) > _capacity) {
+			reserve(_size + (last - first));
+		}
+		for (size_type i = _size; i >= index && i-- > 0;) {
+			_alloc.construct(&_data[i + (last - first)], _data[i]);
+			_alloc.destroy(&_data[i]);
+		}
+		while (first != last) {
+			_alloc.construct(&_data[index], *first);
+			first++;
+			index++;
+			_size++;
+		}
+	};
+
+	allocator_type get_allocator(void) const { return (_alloc); };
 
 	iterator begin(void) {
 		return (iterator(_data));
@@ -253,48 +350,6 @@ class vector : public CONTAINER {
 		return (*(end() - 1));
 	};
 
-	template <class InputIterator>
-	void assign(InputIterator first, InputIterator last) {
-		typedef typename ft::is_integral<InputIterator>::type Integral;
-		_assign(first, last, Integral());
-	};
-
-	template <typename Integer>
-	void _assign(Integer n, Integer val, true_type) {
-		for (size_t i = 0; i < _size; i++) {
-			_alloc.destroy(&_data[i]);
-		}
-		_alloc.deallocate(_data, _capacity);
-		if (static_cast<size_type>(n) > _capacity) {
-			_capacity = n;
-		}
-		_data = _alloc.allocate(n);
-		if (_data == NULL) {
-			throw std::bad_alloc();
-		}
-		_size = n;
-		for (size_t i = 0; i < _size; i++) {
-			_alloc.construct(&_data[i], val);
-		}
-	};
-
-	template <typename InputIterator>
-	void _assign(InputIterator first, InputIterator last, false_type) {
-		for (size_t i = 0; i < _size; i++) {
-			_alloc.destroy(&_data[i]);
-		}
-		_alloc.deallocate(_data, _capacity);
-		if (static_cast<size_type>(ft::distance(first, last)) > _capacity) {
-			_capacity = ft::distance(first, last);
-		}
-		_data = _alloc.allocate(_capacity);
-		if (_data == NULL) {
-			throw std::bad_alloc();
-		}
-		_size = ft::distance(first, last);
-		std::uninitialized_copy(first, last, _data);
-	};
-
 	void push_back(const value_type& val) {
 		if (_size + 1 > _capacity) {
 			_capacity ? _capacity *= 2 : _capacity++;
@@ -315,99 +370,6 @@ class vector : public CONTAINER {
 
 	void pop_back(void) {
 		erase(end() - 1);
-	};
-
-	iterator insert(iterator position, const value_type& val) {
-		size_type distance = ft::distance(begin(), position);
-		if (_capacity == 0) {
-			reserve(1);
-			_alloc.construct(&_data[distance], val);
-			_size++;
-			return (iterator(&_data[distance]));
-		}
-		if (_capacity < (_size + 1)) {
-			reserve(_capacity * 2);
-		}
-		if (position == end()) {
-			push_back(val);
-			return (iterator(&_data[distance]));
-		}
-		if (ft::is_integral<value_type>::value) {
-			std::copy_backward(&_data[distance], &_data[_size], &_data[_size + 1]);
-		} else {
-			for (size_t i = _size; i > distance; i--) {
-				_alloc.construct(&_data[i], _data[i - 1]);
-				_alloc.destroy(&_data[i - 1]);
-			}
-		}
-		_alloc.construct(&_data[distance], val);
-		_size++;
-		return (iterator(&_data[distance]));
-	};
-
-	void insert(iterator position, size_type n, const value_type& val) {
-		size_type distance = ft::distance(begin(), position);
-		if (_capacity == 0) {
-			reserve(n);
-			_size = n;
-			for (size_t i = 0; i < n; i++)
-				_alloc.construct(&_data[distance + i], val);
-			return;
-		}
-		if (_capacity < (_size + n)) {
-			reserve(_capacity * 2);
-		}
-		for (size_t i = 0; i < n; i++) {
-			insert(begin() + distance, val);
-		}
-	};
-
-	template <class InputIterator>
-	void insert(iterator position, InputIterator first, InputIterator last) {
-		typedef typename ft::is_integral<InputIterator>::type Integral;
-		_insert(position, first, last, Integral());
-	};
-
-	template <class Integer>
-	void _insert(iterator position,
-												size_type n, const Integer& val, true_type) {
-		size_type distance = ft::distance(begin(), position);
-		if (_capacity == 0) {
-			reserve(n);
-			_size = n;
-			for (size_t i = 0; i < n; i++)
-				_alloc.construct(&_data[distance + i], val);
-			return;
-		}
-		if (_capacity < (_size + n)) {
-			reserve(_capacity * 2);
-		}
-		for (size_t i = 0; i < n; i++) {
-			insert(begin() + distance, val);
-		}
-	};
-
-	template <class InputIterator>
-	void _insert(iterator position,
-												InputIterator first, InputIterator last, false_type) {
-		size_type distance = ft::distance(begin(), position);
-		size_type n = ft::distance(first, last);
-		if (_capacity == 0) {
-			reserve(n);
-			_size = n;
-			for (size_t i = 0; i < n; i++) {
-				_alloc.construct(&_data[distance + i], *first);
-				first++;
-			}
-			return;
-		}
-		if (_capacity < (_size + n)) {
-			reserve(_capacity * 2);
-		}
-		for (size_t i = 0; i < n; i++) {
-			last--;
-			insert(begin() + distance, *last);
-		}
 	};
 
 	iterator erase(iterator position) {
@@ -442,9 +404,6 @@ class vector : public CONTAINER {
 		else { std::swap(*this, x); }
 	};
 
-	allocator_type get_allocator(void) const {
-		return (_alloc);
-	};
 };
 #undef CONTAINER
 

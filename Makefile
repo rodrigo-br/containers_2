@@ -23,19 +23,19 @@ ifdef STD
 endif
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 all:		$(NAME)
 
 $(NAME): $(OBJ_DIR) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-			rm -rf $(OBJS)
-			rm -rf leaks.txt
+			@rm -rf $(OBJS)
+			@rm -rf leaks.txt
 
 fclean:		clean
-			rm -rf $(NAME)
+			@rm -rf $(NAME)
 
 re:			fclean all
 
@@ -65,8 +65,8 @@ cleantxt:
 		rm -rf stdmap.txt
 
 complete: fclean all
-			./$(NAME)
-		  make fclean
-		  make all STD=1
-		  ./$(NAME)
-		  make diff
+			@./$(NAME)
+			@make fclean
+			@make all STD=1
+			@./$(NAME)
+			@make diff
