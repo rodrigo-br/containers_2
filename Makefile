@@ -18,6 +18,10 @@ ifdef V
 	TEST_FLAG += -s -d yes
 endif
 
+ifdef STD
+	CFLAGS += -D STD
+endif
+
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -32,10 +36,6 @@ clean:
 
 fclean:		clean
 			rm -rf $(NAME)
-			rm -rf ftvector.txt
-			rm -rf stdvector.txt
-			rm -rf ftmap.txt
-			rm -rf stdmap.txt
 
 re:			fclean all
 
@@ -46,3 +46,20 @@ test:	$(TEST)
 		$(CC) -g3 $(TEST_SRC) $(TEST) -o ../tests/capivarinha
 		@echo
 		valgrind --leak-check=full --show-leak-kinds=all --log-file="leaks.txt" ../tests/capivarinha ${TEST_FLAG}
+
+diff:
+		@echo
+		@echo "ftvector & stdvector"
+		@echo
+		@diff -y ftvector.txt stdvector.txt
+		@echo
+		@echo "ftmap & stdmap"
+		@echo
+		@diff -y ftmap.txt stdmap.txt
+		@echo
+
+cleantxt:
+			rm -rf ftvector.txt
+			rm -rf stdvector.txt
+			rm -rf ftmap.txt
+			rm -rf stdmap.txt
