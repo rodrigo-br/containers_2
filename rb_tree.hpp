@@ -70,20 +70,16 @@ private:
 
  public:
 	explicit Rb_tree(const key_compare& comp = key_compare(),
-					const allocator_type& alloc = allocator_type()) {
-		_alloc = alloc;
-		_dummy = _alloc.allocate(1);
+					const allocator_type& alloc = allocator_type())
+		: _alloc(alloc), _dummy(_alloc.allocate(1)), _size(0), _comp(comp) {
 		_alloc.construct(_dummy, create_node(value_type(), BLACK));
 		_root = _dummy;
-		_size = 0;
-		_comp = comp;
 	};
 
-	Rb_tree(const Rb_tree& src) : _alloc(src._alloc), _comp(src._comp), _size(src._size) {
-		_dummy = _alloc.allocate(1);
+	Rb_tree(const Rb_tree& x) : _alloc(x._alloc), _dummy(_alloc.allocate(1)), _comp(x._comp), _size(x._size) {
 		_alloc.construct(_dummy, create_node(value_type(), BLACK));
 		_root = _dummy;
-		copy(src._root);
+		copy(x._root);
 	};
 
 	Rb_tree& operator=(const Rb_tree& rhs) {
@@ -105,38 +101,6 @@ private:
 		_alloc.destroy(_dummy);
 		_alloc.deallocate(_dummy, 1);
 		_size = 0;
-	};
-
-	iterator begin(void) {
-		return (iterator(minimum(_root)));
-	};
-
-	const_iterator begin(void) const {
-		return (const_iterator(minimum(_root)));
-	};
-
-	iterator end(void) {
-		return (iterator(_dummy));
-	};
-
-	const_iterator end(void) const {
-		return (const_iterator(_dummy));
-	};
-
-	reverse_iterator rbegin(void) {
-		return (reverse_iterator(end()));
-	};
-
-	const_reverse_iterator rbegin(void) const {
-		return (const_reverse_iterator(end()));
-	};
-
-	reverse_iterator rend(void) {
-		return (reverse_iterator(begin()));
-	};
-
-	const_reverse_iterator rend(void) const {
-		return (const_reverse_iterator(begin()));
 	};
 
 	bool empty(void) const {
@@ -323,6 +287,38 @@ private:
 			}
 			_erase(z);
 		};
+	
+	iterator begin(void) {
+		return (iterator(minimum(_root)));
+	};
+
+	const_iterator begin(void) const {
+		return (const_iterator(minimum(_root)));
+	};
+
+	iterator end(void) {
+		return (iterator(_dummy));
+	};
+
+	const_iterator end(void) const {
+		return (const_iterator(_dummy));
+	};
+
+	reverse_iterator rbegin(void) {
+		return (reverse_iterator(end()));
+	};
+
+	const_reverse_iterator rbegin(void) const {
+		return (const_reverse_iterator(end()));
+	};
+
+	reverse_iterator rend(void) {
+		return (reverse_iterator(begin()));
+	};
+
+	const_reverse_iterator rend(void) const {
+		return (const_reverse_iterator(begin()));
+	};
 
 	Node_ptr getroot(void)
 		{
@@ -375,7 +371,7 @@ private:
 
 	Node_ptr _find(Node_ptr node, Key key) const {
 		if (node == _dummy || (!_comp(key, KeyOfValue()(node->data)) &&
-													!_comp(KeyOfValue()(node->data), key))) {
+			!_comp(KeyOfValue()(node->data), key))) {
 			return (node);
 		}
 		if (_comp(key, KeyOfValue()(node->data))) {
@@ -399,9 +395,7 @@ private:
 				x = x->right;
 			}
 		}
-
 		z->parent = y;
-
 		if (y == _dummy) {
 			_root = z;
 		} else if (_comp(KeyOfValue()(z->data), KeyOfValue()(y->data))) {
@@ -412,7 +406,6 @@ private:
 			z->right = _dummy;
 			setColor(z, RED);
 		}
-
 		insert_fix(z);
 		_dummy->root = _root;
 		_size++;
