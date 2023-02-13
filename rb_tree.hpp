@@ -42,28 +42,28 @@ private:
 		size_type								_size;
 		key_compare								_comp;
 
-	static Color getColor(Const_node_ptr x)
+	Color getColor(Const_node_ptr x)
 	{
 		return (x == NULL ? BLACK : x->color);
 	};
 
-	static void setColor(Node_ptr x, Color c)
+	void setColor(Node_ptr x, Color c)
 	{
 		if (x != NULL)
 			x->color = c;
 	};
 
-	static bool isRed(Const_node_ptr x)
+	bool isRed(Const_node_ptr x)
 	{
 		return (getColor(x) == RED);
 	};
 
-	static bool isBlack(Const_node_ptr x)
+	bool isBlack(Const_node_ptr x)
 	{
 		return (getColor(x) == BLACK);
 	};
 
-	static bool isNullOrBlack(Const_node_ptr x)
+	bool isNullOrBlack(Const_node_ptr x)
 	{
 		return (x == NULL || isBlack(x));
 	};
